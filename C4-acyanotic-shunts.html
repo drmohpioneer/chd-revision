@@ -1,0 +1,412 @@
+<meta charset="utf-8">
+<title>C4 - Acyanotic (left-to-right shunt) lesions</title>
+<style>
+  :root{--bg:#0e1220;--panel:#161c2e;--ink:#e8ecf5;--muted:#95a1bd;--accent:#7aa2ff;--pos:#38a169;--neg:#e53e3e;--iso:#718096;--warn:#e0a53e;--hi:#ff5d6c;--mix:#b57af6;--red:#e05a6c;--blue:#4aa3f6;--pink:#f2a6c0}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .card{background:var(--panel);border:1px solid #232b45;border-radius:14px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .seg button{flex:1;min-width:140px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
+  .seg button:hover{border-color:var(--accent)}
+  .seg button.good.on{background:#1e4b32;border-color:var(--pos);color:#9be2b8}
+  .seg button.bad.on{background:#5a2530;border-color:var(--neg);color:#ff9aa2}
+  .rule{background:#1c2540;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .warnrule{background:#3a2f16;border-left:3px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .big{font-size:15px;font-weight:900;color:#fff}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .flowwrap{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+  @media(max-width:820px){.flowwrap{grid-template-columns:1fr}}
+  .box{fill:#0b1020;stroke:#2b3552;stroke-width:1.5}
+  .rh{fill:#0f1b2e;stroke:#31527a;stroke-width:1.5}
+  .lh{fill:#221420;stroke:#7a3145;stroke-width:1.5}
+  .lbl{fill:#cdd6ea;font:600 12px sans-serif}
+  .lbl.sm{font:600 10.5px sans-serif;fill:#95a1bd}
+  .info{background:#0b1020;border-radius:10px;padding:14px;border-left:4px solid var(--accent)}
+  .info .name{font-size:18px;font-weight:900;margin:0 0 2px}
+  .info p{font-size:13.5px;margin:6px 0 0}
+  .grp{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px}
+  .grp h3{margin:0 0 6px;font-size:15px}
+  .grp .tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+  .grp ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+  .grp li{margin:4px 0}
+  .foot{color:var(--muted);font-size:12px;margin-top:6px}
+  .kv{font-size:13.5px;margin:2px 0}
+  .dot{fill:#fff;stroke:#0e1220;stroke-width:1}
+  .stage{background:#0b1020;border-radius:10px;padding:16px;text-align:center}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:700px){.cmp{grid-template-columns:1fr}}
+  .cmp .col{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px;text-align:center}
+  .cmp .col.sec{border-top:4px solid var(--blue)}
+  .cmp .col.pri{border-top:4px solid var(--warn)}
+  .cmp .col h3{margin:6px 0 4px;font-size:15px}
+  .satpill{display:inline-block;font-size:12px;font-weight:900;padding:3px 12px;border-radius:20px;margin-top:8px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:2px 0 10px}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+</style>
+
+<div class="wrap">
+  <h1>C4 - Acyanotic (left-to-right shunt) lesions: ASD, VSD, PDA, AVSD</h1>
+  <p class="sub">The ACYANOTIC branch of C1: the baby is PINK, not blue, because the higher-pressure LEFT heart pushes oxygenated blood back into the low-pressure RIGHT heart / lungs, so the lungs are over-circulated. The shunt GROWS as the pulmonary vascular resistance falls over the first weeks (C1), so a big one causes failure and, long-term, pulmonary hypertension. Anchors: Q3 an adult with RAD + RVH + a dilated RV = secundum ASD; Q4 you do NOT close silent tiny ducts; Q7 Down + LEFT axis + infant failure = complete AVSD; Q9 a 100 mmHg gradient across a VSD = a small restrictive VSD = do NOT close.</p>
+
+  <!-- 1. INTERACTIVE LEFT-TO-RIGHT SHUNT HEART -->
+  <div class="card">
+    <h2>1. The left-to-right shunt heart: click a level to open that shunt (oxygenated blood crosses LEFT heart to RIGHT heart to lungs)</h2>
+    <div class="seg">
+      <button data-shunt="none" class="on">No shunt (normal separation)</button>
+      <button data-shunt="asd">ASD (atrial level)</button>
+      <button data-shunt="vsd">VSD (ventricular level)</button>
+      <button data-shunt="pda">PDA (aorta to PA duct)</button>
+    </div>
+    <div class="legend">
+      <span><span class="sw" style="background:#4aa3f6"></span>right heart / deoxygenated (blue)</span>
+      <span><span class="sw" style="background:#e05a6c"></span>left heart / oxygenated (red)</span>
+      <span><span class="sw" style="background:#b57af6"></span>the defect</span>
+    </div>
+    <div class="flowwrap">
+      <div>
+        <svg id="shuntSvg" viewBox="0 0 440 340" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- lungs (top-left, PA destination) -->
+          <ellipse id="lungEll" cx="95" cy="55" rx="58" ry="28" fill="#1a2436" stroke="#4aa3f6" stroke-width="1.5"></ellipse>
+          <text x="95" y="52" text-anchor="middle" class="lbl sm" fill="#8ac6f6">LUNGS</text>
+          <text id="lungState" x="95" y="66" text-anchor="middle" class="lbl sm" fill="#6f7c99">normal flow</text>
+          <!-- body (top-right, aorta destination) -->
+          <ellipse cx="352" cy="55" rx="46" ry="25" fill="#2a1620" stroke="#e05a6c" stroke-width="1.5"></ellipse>
+          <text x="352" y="59" text-anchor="middle" class="lbl sm" fill="#ffb3bd">body</text>
+          <!-- SVC + IVC into RA (screen-left) -->
+          <path d="M118,104 C132,116 142,120 150,124" fill="none" stroke="#3a5f86" stroke-width="4"></path>
+          <text x="100" y="102" text-anchor="middle" class="lbl sm" fill="#7f93b3">SVC</text>
+          <path d="M118,192 C132,178 142,166 150,160" fill="none" stroke="#3a5f86" stroke-width="4"></path>
+          <text x="100" y="200" text-anchor="middle" class="lbl sm" fill="#7f93b3">IVC</text>
+          <!-- PA off the RV (screen-left) -> lungs -->
+          <path d="M183,164 L183,102 C183,86 150,76 130,74" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round" opacity=".9"></path>
+          <text x="163" y="122" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA</text>
+          <!-- Aorta off the LV (screen-right) -> body -->
+          <path d="M249,164 L249,100 C249,82 300,74 320,72" fill="none" stroke="#e05a6c" stroke-width="7" stroke-linecap="round" opacity=".9"></path>
+          <text x="272" y="120" text-anchor="middle" class="lbl sm" fill="#ffb3bd">Aorta</text>
+          <!-- chambers: RA upper-left, LA upper-right, RV lower-left, LV lower-right -->
+          <rect x="150" y="118" width="66" height="46" rx="7" class="rh"></rect>
+          <text x="183" y="145" text-anchor="middle" class="lbl">RA</text>
+          <rect x="216" y="118" width="66" height="46" rx="7" class="lh"></rect>
+          <text x="249" y="145" text-anchor="middle" class="lbl">LA</text>
+          <rect x="150" y="164" width="66" height="94" rx="8" class="rh"></rect>
+          <text x="183" y="238" text-anchor="middle" class="lbl">RV</text>
+          <rect x="216" y="164" width="66" height="94" rx="8" class="lh"></rect>
+          <text x="249" y="238" text-anchor="middle" class="lbl">LV</text>
+          <!-- PDA duct connecting aorta -> PA (near top) -->
+          <path id="mPda" d="M249,110 C226,96 206,96 183,110" fill="none" stroke="#2b3552" stroke-width="8" stroke-linecap="round"></path>
+          <text x="216" y="90" text-anchor="middle" class="lbl sm" fill="#6f7c99">duct</text>
+          <!-- ASD marker (atrial septum) -->
+          <rect id="mAsd" x="209" y="130" width="14" height="22" rx="3" fill="#2b3552" stroke="#2b3552"></rect>
+          <!-- VSD marker (ventricular septum) -->
+          <rect id="mVsd" x="209" y="190" width="14" height="34" rx="4" fill="#2b3552" stroke="#2b3552"></rect>
+          <!-- shunt dot -->
+          <circle id="shuntDot" class="dot" r="6" cx="249" cy="141" fill="#e05a6c" opacity="0"></circle>
+        </svg>
+        <p class="foot">Standard anterior view: RA upper-left, LA upper-right, RV lower-left, LV lower-right; SVC and IVC into the RA on the left; aorta off the LV (right), PA off the RV (left). Every shunt sends oxygenated (red) blood from the LEFT heart to the RIGHT heart and up to the lungs. Hand-drawn, nothing embedded.</p>
+      </div>
+      <div class="info" id="shuntInfo">
+        <p class="name" id="shuntName">Normal separation (no shunt)</p>
+        <div id="shuntBody"></div>
+        <div style="text-align:center"><span class="satpill" id="shuntPill" style="background:#22303f;color:#9fb6cf">baby: pink, lungs normal</span></div>
+      </div>
+    </div>
+    <div class="rule"><b>The spectrum that runs the whole bucket:</b> a SMALL (restrictive) defect = high resistance = small shunt but a big pressure drop = a LOUD murmur, often closes on its own, normal PA pressure. A LARGE (non-restrictive) defect = free communication = big shunt = heart failure + pulmonary hypertension. Loud murmur + well baby usually means small; a soft murmur in a sick, breathless baby can mean a big one.</div>
+    <div class="warnrule big">The shunt is oxygenated blood taking a wrong turn, so the baby is PINK (acyanotic), but the lungs are over-circulated (plethoric). The shunt GROWS as the PVR falls over the first weeks (C1), so these present at weeks to months, not on day one. Left for years, a big shunt drives pulmonary hypertension to Eisenmenger (card 6).</div>
+  </div>
+
+  <!-- 2. ASD secundum vs primum -->
+  <div class="card">
+    <h2>2. Atrial septal defect: secundum (RIGHT axis) vs primum (LEFT axis) - owns Q3</h2>
+    <p class="kv" style="margin:0 0 12px;color:#95a1bd">LA to RA shunt = <b>RV volume overload</b> (dilated RA + RV). Classic sign: a <b>wide, FIXED split S2</b>. Often silent in childhood, so it commonly presents in <b>ADULTHOOD</b> (dyspnoea, dilated RA/RV, atrial arrhythmias, pulmonary hypertension). The axis tells you the type.</p>
+    <div class="cmp">
+      <div class="col sec">
+        <svg viewBox="0 0 140 90" style="width:130px;height:84px">
+          <circle cx="70" cy="45" r="34" fill="none" stroke="#2b3552" stroke-width="1.5"></circle>
+          <line x1="36" y1="45" x2="104" y2="45" stroke="#2b3552"></line>
+          <line x1="70" y1="11" x2="70" y2="79" stroke="#2b3552"></line>
+          <!-- RIGHT axis +120: arrow down-LEFT (hexaxial: lead I negative -> screen left, aVF positive -> down) -->
+          <line x1="70" y1="45" x2="44" y2="70" stroke="#4aa3f6" stroke-width="3"></line>
+          <polygon points="44,70 54,68 48,60" fill="#4aa3f6"></polygon>
+        </svg>
+        <h3 style="color:#8ac6f6">Ostium secundum (commonest)</h3>
+        <p class="kv">Mid-septum. <b>RIGHT axis deviation</b> + <b>RSR' in V1</b> (incomplete RBBB). The plain ASD.</p>
+        <span class="satpill" style="background:#12283a;color:#8ac6f6">RIGHT axis = secundum</span>
+      </div>
+      <div class="col pri">
+        <svg viewBox="0 0 140 90" style="width:130px;height:84px">
+          <circle cx="70" cy="45" r="34" fill="none" stroke="#2b3552" stroke-width="1.5"></circle>
+          <line x1="36" y1="45" x2="104" y2="45" stroke="#2b3552"></line>
+          <line x1="70" y1="11" x2="70" y2="79" stroke="#2b3552"></line>
+          <!-- LEFT axis -45: arrow up-RIGHT (hexaxial: lead I positive -> screen right, aVF negative -> up) -->
+          <line x1="70" y1="45" x2="96" y2="24" stroke="#e0a53e" stroke-width="3"></line>
+          <polygon points="96,24 86,26 92,34" fill="#e0a53e"></polygon>
+        </svg>
+        <h3 style="color:#f6c98a">Ostium primum</h3>
+        <p class="kv">Low septum, part of the <b>AVSD / endocardial-cushion spectrum</b>, so it behaves like the AVSD family: <b>LEFT axis deviation</b>.</p>
+        <span class="satpill" style="background:#3a2f16;color:#f6c98a">LEFT axis = primum</span>
+      </div>
+    </div>
+    <div class="warnrule big">Q3 = <b>B (secundum ASD)</b>. A 52 year old with SOB, <b>RAD + RVH</b> and a <b>dilated RV</b> with high-normal PA pressure = a secundum ASD presenting late with RV volume overload and early pulmonary hypertension. The <b>RIGHT axis</b> is the tell: a primum ASD (A) would give LEFT axis; TOF (C) and truncus (D) are cyanotic neonatal lesions. Secundum = RIGHT axis; primum = LEFT axis.</div>
+  </div>
+
+  <!-- 3. VSD closure indications -->
+  <div class="card">
+    <h2>3. Ventricular septal defect: when to close it - owns Q9</h2>
+    <p class="kv" style="margin:0 0 12px;color:#95a1bd">The commonest congenital defect. LV to RV shunt = a <b>harsh pansystolic murmur at the left sternal border</b>. <b>Small (restrictive) = LOUD murmur, small shunt, often closes; large (non-restrictive) = over-circulation, failure, pulmonary hypertension.</b></p>
+    <div class="grid">
+      <div class="grp" style="border-top:4px solid var(--pos)">
+        <span class="tag" style="background:#12281c;color:#9be2b8">CLOSE the VSD when (real indications)</span>
+        <ul>
+          <li>A <b>significant shunt (high Qp:Qs)</b> with <b>LV volume overload / dilatation</b></li>
+          <li><b>Aortic regurgitation</b> from an aortic cusp prolapsing into the defect</li>
+          <li><b>Failure to thrive</b> (a big non-restrictive shunt)</li>
+          <li>Pulmonary hypertension while still operable</li>
+        </ul>
+      </div>
+      <div class="grp" style="border-top:4px solid var(--warn)">
+        <span class="tag" style="background:#3a2f16;color:#e0c07a">Do NOT close (the Q9 trap)</span>
+        <ul>
+          <li>A <b>peak gradient of 100 mmHg ACROSS the VSD</b></li>
+          <li>Why: a big gradient means LV pressure is still far above RV pressure at the hole</li>
+          <li>= a <b>small, RESTRICTIVE VSD</b> (high resistance, small shunt, protected lungs)</li>
+          <li>That is the good kind that often self-closes: <b>leave it</b></li>
+        </ul>
+      </div>
+    </div>
+    <div class="warnrule big">Q9 = <b>C</b>. Real indications are LV dilatation (A), AR from cusp prolapse (B) and failure to thrive (D). A <b>100 mmHg gradient across the VSD (C) is NOT an indication</b>: it flags a small restrictive VSD, so it is the odd one out. Do not read a big gradient as severity.</div>
+  </div>
+
+  <!-- 4. PDA -->
+  <div class="card">
+    <h2>4. Patent ductus arteriosus: machinery murmur and the silent-duct trap - owns Q4</h2>
+    <div class="grid">
+      <div class="stage">
+        <svg viewBox="0 0 260 200" style="width:100%;height:auto;max-width:260px">
+          <!-- aorta (from LV) on the right, PA on the left, duct between -->
+          <path d="M70,170 L70,60 C70,44 90,40 104,40" fill="none" stroke="#4aa3f6" stroke-width="9" stroke-linecap="round"></path>
+          <text x="52" y="150" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA</text>
+          <path d="M180,170 L180,55 C180,38 150,34 132,40" fill="none" stroke="#e05a6c" stroke-width="9" stroke-linecap="round"></path>
+          <text x="200" y="150" text-anchor="middle" class="lbl sm" fill="#ffb3bd">Aorta</text>
+          <!-- the persistent duct: aorta -> PA -->
+          <path d="M170,48 C150,34 120,34 100,48" fill="none" stroke="#b57af6" stroke-width="7" stroke-linecap="round"></path>
+          <text x="132" y="26" text-anchor="middle" class="lbl sm" fill="#c9a6ff">patent duct</text>
+          <!-- flow dot aorta -> PA (red, oxygenated) -->
+          <circle id="pdaDot" class="dot" r="5" cx="170" cy="48" fill="#e05a6c"></circle>
+          <text x="130" y="190" text-anchor="middle" class="lbl sm" fill="#95a1bd">shunt in systole AND diastole</text>
+        </svg>
+      </div>
+      <div>
+        <p class="kv"><b>The duct fails to close</b> (C1), so aortic pressure exceeds pulmonary pressure all through the cycle and blood shunts <b>aorta to PA in systole AND diastole</b>.</p>
+        <p class="kv" style="color:#8ac6f6"><b>Signatures:</b> a <b>continuous "machinery" murmur</b> and a <b>wide pulse pressure with bounding pulses</b> (diastolic run-off into the PA).</p>
+        <div class="grp" style="margin-top:10px;border-top:4px solid var(--warn)">
+          <span class="tag" style="background:#3a2f16;color:#e0c07a">Q4 facts (find the FALSE one)</span>
+          <ul>
+            <li>A <b>restrictive PDA = a NORMAL PA pressure</b> (true)</li>
+            <li><b>Infective endarteritis</b> is a dreaded complication (true)</li>
+            <li>Small PDAs are closed <b>percutaneously</b> (true)</li>
+            <li>"Close every duct, even SILENT ones" = <b>FALSE</b> (leave silent tiny ducts)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="warnrule big">Q4 = <b>C (the EXCEPT)</b>. You do NOT chase a truly silent, tiny, incidental duct (no murmur, no volume load): the procedural risk outweighs the negligible benefit. A, B and D are all true, so "close even silent ducts" is the false statement.</div>
+  </div>
+
+  <!-- 5. AVSD + Down -->
+  <div class="card">
+    <h2>5. Atrioventricular septal defect: Down syndrome + LEFT axis - owns Q7</h2>
+    <div class="grid">
+      <div class="stage">
+        <svg viewBox="0 0 260 210" style="width:100%;height:auto;max-width:260px">
+          <!-- four chambers, anterior view: RA UL, LA UR, RV LL, LV LR -->
+          <rect x="60" y="40" width="66" height="44" rx="7" class="rh"></rect>
+          <text x="93" y="66" text-anchor="middle" class="lbl">RA</text>
+          <rect x="134" y="40" width="66" height="44" rx="7" class="lh"></rect>
+          <text x="167" y="66" text-anchor="middle" class="lbl">LA</text>
+          <rect x="60" y="120" width="66" height="70" rx="8" class="rh"></rect>
+          <text x="93" y="170" text-anchor="middle" class="lbl">RV</text>
+          <rect x="134" y="120" width="66" height="70" rx="8" class="lh"></rect>
+          <text x="167" y="170" text-anchor="middle" class="lbl">LV</text>
+          <!-- central endocardial-cushion defect: primum ASD + inlet VSD + common AV valve -->
+          <rect x="123" y="48" width="14" height="28" rx="3" fill="#b57af6"></rect>
+          <text x="130" y="34" text-anchor="middle" class="lbl sm" fill="#c9a6ff">primum ASD</text>
+          <rect x="118" y="122" width="24" height="40" rx="4" fill="#b57af6"></rect>
+          <text x="130" y="204" text-anchor="middle" class="lbl sm" fill="#c9a6ff">inlet VSD</text>
+          <!-- common AV valve across the middle -->
+          <rect x="72" y="96" width="116" height="14" rx="5" fill="#a06fb0" opacity=".9"></rect>
+          <text x="130" y="106" text-anchor="middle" class="lbl sm" fill="#f0e0ff">common AV valve</text>
+        </svg>
+      </div>
+      <div>
+        <p class="kv"><b>The endocardial cushions fail to fuse</b>, so the CENTRE of the heart is open: a <b>common (single) AV valve + a primum ASD + an inlet VSD</b>. A big central left-to-right shunt plus AV-valve regurgitation = heavy over-circulation and <b>early heart failure</b>.</p>
+        <div class="grp" style="margin-top:10px;border-top:4px solid var(--warn)">
+          <span class="tag" style="background:#3a2f16;color:#e0c07a">The two buzzword tells</span>
+          <ul>
+            <li><b>Down syndrome (trisomy 21)</b> - the classic cardiac lesion</li>
+            <li><b>LEFT axis deviation</b> (endocardial-cushion / primum family)</li>
+            <li>Infant with failure to thrive, tachypnoea, low LLSB murmur, cardiomegaly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="warnrule big">Q7 = <b>B (complete AVSD)</b>. A 3 month old with <b>trisomy 21</b>, poor weight gain, tachypnoea, a low LLSB murmur, cardiomegaly and <b>LEFT axis deviation</b> = complete AVSD. The LEFT axis rules out a plain VSD (D) and a secundum ASD (E); coarctation (A) and PDA (C) do not fit. <b>Down + LEFT axis + infant failure = AVSD.</b></div>
+  </div>
+
+  <!-- 6. EISENMENGER endpoint -->
+  <div class="card">
+    <h2>6. Eisenmenger: the endpoint where the shunt reverses and the patient turns blue</h2>
+    <div class="seg" style="max-width:560px">
+      <button id="eisLR" class="on">Early: LEFT to RIGHT shunt (pink, closeable)</button>
+      <button id="eisRL" class="bad">Late: shunt REVERSED right to left (blue)</button>
+    </div>
+    <div class="grid">
+      <div class="stage">
+        <svg id="eisSvg" viewBox="0 0 260 180" style="width:100%;height:auto;max-width:260px">
+          <!-- two ventricles with a septal defect; anterior view RV left, LV right -->
+          <rect x="50" y="40" width="80" height="100" rx="8" class="rh"></rect>
+          <text x="90" y="130" text-anchor="middle" class="lbl">RV</text>
+          <rect x="130" y="40" width="80" height="100" rx="8" class="lh"></rect>
+          <text x="170" y="130" text-anchor="middle" class="lbl">LV</text>
+          <rect x="123" y="70" width="14" height="40" rx="4" fill="#b57af6"></rect>
+          <text x="130" y="60" text-anchor="middle" class="lbl sm" fill="#c9a6ff">defect</text>
+          <!-- pressure labels -->
+          <text id="eisRvP" x="90" y="34" text-anchor="middle" class="lbl sm" fill="#7f93b3">RV: low pressure</text>
+          <text id="eisLvP" x="170" y="34" text-anchor="middle" class="lbl sm" fill="#ffb3bd">LV: high pressure</text>
+          <!-- flow arrow across defect -->
+          <line id="eisArrow" x1="150" y1="90" x2="110" y2="90" stroke="#e05a6c" stroke-width="5"></line>
+          <polygon id="eisHead" points="110,90 122,84 122,96" fill="#e05a6c"></polygon>
+        </svg>
+      </div>
+      <div>
+        <p class="name" id="eisName" style="font-size:17px;font-weight:900;margin:0 0 6px">Early: left-to-right shunt</p>
+        <div id="eisBody">
+          <p class="kv"><b>The high-pressure LV drives blood into the low-pressure RV</b> through the defect. The patient is <b>PINK (acyanotic)</b>, the lungs are over-circulated, and the defect is still <b style="color:#9be2b8">closeable</b>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="warnrule big">Years of over-circulation thicken and scar the pulmonary arteries, so the <b>PVR becomes fixed and suprasystemic</b>. Once the right-side pressure exceeds the left, the <b>shunt REVERSES to right-to-left</b>, deoxygenated blood crosses to the body, and the patient turns <b>CYANOTIC (Eisenmenger)</b>. Now the defect can <b>no longer be closed</b> (closing it leaves the right heart pumping against an unbeatable resistance). This is WHY you close big shunts early. Full adult detail in C7.</div>
+  </div>
+
+  <p class="foot">C4 visual - Module 5 CHD. Hand-drawn inline SVG, self-contained.</p>
+</div>
+
+<script>
+(function(){
+  // ---------- 1. Interactive left-to-right shunt heart ----------
+  // All dots: oxygenated (red) blood from LEFT heart -> RIGHT heart -> up PA -> lungs.
+  var shunts={
+    none:{name:'Normal separation (no shunt)',
+      body:'<p>The septa are intact and the duct is closed. The LEFT heart (red, oxygenated) and the RIGHT heart (blue, deoxygenated) stay separate, so nothing recirculates. Click a level to open a shunt.</p>',
+      pill:'baby: pink, lungs normal',pillc:'#22303f;color:#9fb6cf',run:false,pleth:false},
+    asd:{name:'ASD (atrial level): LA to RA',
+      body:'<p><b>A hole in the atrial septum</b> lets oxygenated blood cross from the <b>LA to the RA</b> (right-to-left across the screen, because the LA is on the screen-right). The extra volume loads the RIGHT heart = <b>RV volume overload</b>, and the blood recirculates up the PA to over-circulate the lungs. Sign: a wide FIXED split S2.</p>',
+      pill:'baby: pink, lungs over-circulated',pillc:'#12283a;color:#8ac6f6',
+      el:'mAsd',pts:[[249,141],[216,141],[183,141],[183,207],[183,110],[130,74]],run:true,pleth:true},
+    vsd:{name:'VSD (ventricular level): LV to RV',
+      body:'<p><b>A hole in the ventricular septum</b> lets oxygenated blood cross from the <b>LV to the RV</b> (right-to-left across the screen) in systole = a harsh pansystolic murmur at the left sternal border. The shunted blood goes up the PA and over-circulates the lungs.</p>',
+      pill:'baby: pink, lungs over-circulated',pillc:'#12283a;color:#8ac6f6',
+      el:'mVsd',pts:[[249,211],[216,207],[183,211],[183,110],[130,74]],run:true,pleth:true},
+    pda:{name:'PDA (ductal level): aorta to PA',
+      body:'<p><b>The persistent duct</b> lets oxygenated blood cross from the <b>aorta (off the LV) to the pulmonary artery (off the RV)</b> in systole AND diastole = a continuous machinery murmur + a wide pulse pressure. The shunt over-circulates the lungs.</p>',
+      pill:'baby: pink, lungs over-circulated',pillc:'#12283a;color:#8ac6f6',
+      el:'mPda',pts:[[249,155],[249,112],[216,99],[183,112],[160,92],[130,74]],run:true,pleth:true}
+  };
+  var dot=document.getElementById('shuntDot');
+  var run=false,pts=[],t=0;
+  function resetShunt(){
+    document.getElementById('mAsd').setAttribute('fill','#2b3552');
+    document.getElementById('mVsd').setAttribute('fill','#2b3552');
+    document.getElementById('mPda').setAttribute('stroke','#2b3552');
+    dot.setAttribute('opacity','0');
+  }
+  function setLungs(pleth){
+    var ell=document.getElementById('lungEll'), st=document.getElementById('lungState');
+    if(pleth){ ell.setAttribute('fill','#2f4d70'); ell.setAttribute('stroke','#8ac6f6'); st.textContent='plethoric (over-circulated)'; st.setAttribute('fill','#bcd4f0'); }
+    else { ell.setAttribute('fill','#1a2436'); ell.setAttribute('stroke','#4aa3f6'); st.textContent='normal flow'; st.setAttribute('fill','#6f7c99'); }
+  }
+  function selShunt(k){
+    document.querySelectorAll('[data-shunt]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-shunt')===k);});
+    resetShunt();
+    var s=shunts[k];
+    if(s.el){
+      var e=document.getElementById(s.el);
+      if(k==='pda')e.setAttribute('stroke','#b57af6'); else e.setAttribute('fill','#b57af6');
+    }
+    document.getElementById('shuntName').textContent=s.name;
+    document.getElementById('shuntBody').innerHTML=s.body;
+    var pill=document.getElementById('shuntPill');
+    pill.textContent=s.pill; pill.style.cssText='background:'+s.pillc;
+    setLungs(s.pleth);
+    if(s.run){ pts=s.pts; t=0; run=true; dot.setAttribute('opacity','1'); }
+    else { run=false; }
+  }
+  document.querySelectorAll('[data-shunt]').forEach(function(b){b.addEventListener('click',function(){selShunt(b.getAttribute('data-shunt'));});});
+  [['mAsd','asd'],['mVsd','vsd'],['mPda','pda']].forEach(function(pair){
+    var e=document.getElementById(pair[0]); if(e)e.addEventListener('click',function(){selShunt(pair[1]);});
+  });
+  function animShunt(){
+    if(run && pts.length>1){
+      var n=pts.length-1;
+      t+=0.006; if(t>=1)t=0;
+      var seg=Math.min(Math.floor(t*n),n-1), f=t*n-seg;
+      var a=pts[seg], b=pts[seg+1];
+      dot.setAttribute('cx',a[0]+(b[0]-a[0])*f);
+      dot.setAttribute('cy',a[1]+(b[1]-a[1])*f);
+    }
+    requestAnimationFrame(animShunt);
+  }
+  animShunt();
+  selShunt('none');
+
+  // ---------- 4. PDA continuous shunt dot (aorta -> PA) ----------
+  var pDot=document.getElementById('pdaDot');
+  var pPts=[[170,48],[150,36],[130,34],[110,40],[100,48]]; // aorta -> across duct -> PA
+  var ptp=0;
+  function animPda(){
+    var n=pPts.length-1;
+    ptp+=0.006; if(ptp>=1)ptp=0;
+    var seg=Math.min(Math.floor(ptp*n),n-1), f=ptp*n-seg;
+    var a=pPts[seg], b=pPts[seg+1];
+    pDot.setAttribute('cx',a[0]+(b[0]-a[0])*f);
+    pDot.setAttribute('cy',a[1]+(b[1]-a[1])*f);
+    requestAnimationFrame(animPda);
+  }
+  animPda();
+
+  // ---------- 6. Eisenmenger toggle ----------
+  var arrow=document.getElementById('eisArrow'), head=document.getElementById('eisHead'),
+      rvP=document.getElementById('eisRvP'), lvP=document.getElementById('eisLvP');
+  function eisLR(){
+    document.getElementById('eisLR').classList.add('on');
+    document.getElementById('eisRL').classList.remove('on');
+    // LV (right, x170) high -> RV (left, x50) : arrow points LEFT, red
+    arrow.setAttribute('x1','150'); arrow.setAttribute('y1','90'); arrow.setAttribute('x2','110'); arrow.setAttribute('y2','90');
+    arrow.setAttribute('stroke','#e05a6c'); head.setAttribute('points','110,90 122,84 122,96'); head.setAttribute('fill','#e05a6c');
+    rvP.textContent='RV: low pressure'; rvP.setAttribute('fill','#7f93b3');
+    lvP.textContent='LV: high pressure'; lvP.setAttribute('fill','#ffb3bd');
+    document.getElementById('eisName').textContent='Early: left-to-right shunt';
+    document.getElementById('eisBody').innerHTML='<p class="kv"><b>The high-pressure LV drives blood into the low-pressure RV</b> through the defect. The patient is <b>PINK (acyanotic)</b>, the lungs are over-circulated, and the defect is still <b style="color:#9be2b8">closeable</b>.</p>';
+  }
+  function eisRL(){
+    document.getElementById('eisRL').classList.add('on');
+    document.getElementById('eisLR').classList.remove('on');
+    // fixed suprasystemic RV (left) -> LV (right): arrow points RIGHT, blue
+    arrow.setAttribute('x1','110'); arrow.setAttribute('y1','90'); arrow.setAttribute('x2','150'); arrow.setAttribute('y2','90');
+    arrow.setAttribute('stroke','#4aa3f6'); head.setAttribute('points','150,90 138,84 138,96'); head.setAttribute('fill','#4aa3f6');
+    rvP.textContent='RV: fixed suprasystemic'; rvP.setAttribute('fill','#8ac6f6');
+    lvP.textContent='LV: now the lower pressure'; lvP.setAttribute('fill','#7f93b3');
+    document.getElementById('eisName').textContent='Late: Eisenmenger (shunt reversed)';
+    document.getElementById('eisBody').innerHTML='<p class="kv"><b>Fixed, suprasystemic pulmonary hypertension</b> has raised the RV pressure above the LV, so the <b>shunt REVERSES to right-to-left</b>: deoxygenated blood crosses to the body and the patient is now <b style="color:#ff9aa2">CYANOTIC and clubbed</b>. The defect can <b style="color:#ff9aa2">no longer be closed</b>.</p>';
+  }
+  document.getElementById('eisLR').addEventListener('click',eisLR);
+  document.getElementById('eisRL').addEventListener('click',eisRL);
+  eisLR();
+})();
+</script>
