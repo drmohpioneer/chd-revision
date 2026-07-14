@@ -1,0 +1,357 @@
+<meta charset="utf-8">
+<title>C2 - Cyanotic CHD with decreased pulmonary flow</title>
+<style>
+  :root{--bg:#0e1220;--panel:#161c2e;--ink:#e8ecf5;--muted:#95a1bd;--accent:#7aa2ff;--pos:#38a169;--neg:#e53e3e;--iso:#718096;--warn:#e0a53e;--hi:#ff5d6c;--mix:#b57af6;--lo:#4aa3f6;--norm:#63d29b;--dec:#f6a54a;--inc:#4aa3f6}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .card{background:var(--panel);border:1px solid #232b45;border-radius:14px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .seg button{flex:1;min-width:150px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
+  .seg button:hover{border-color:var(--accent)}
+  .seg button.bad.on{background:#5a2530;border-color:var(--neg);color:#ff9aa2}
+  .rule{background:#1c2540;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .warnrule{background:#3a2f16;border-left:3px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .big{font-size:15px;font-weight:900;color:#fff}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .flowwrap{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+  @media(max-width:820px){.flowwrap{grid-template-columns:1fr}}
+  .box{fill:#0b1020;stroke:#2b3552;stroke-width:1.5}
+  .lbl{fill:#cdd6ea;font:600 12px sans-serif}
+  .lbl.sm{font:600 10.5px sans-serif;fill:#95a1bd}
+  .info{background:#0b1020;border-radius:10px;padding:14px;border-left:4px solid var(--accent)}
+  .info .name{font-size:18px;font-weight:900;margin:0 0 2px}
+  .info p{font-size:13.5px;margin:6px 0 0}
+  .grp{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px}
+  .grp.dec{border-top:4px solid var(--dec)}
+  .grp.inc{border-top:4px solid var(--inc)}
+  .grp h3{margin:0 0 6px;font-size:15px}
+  .grp .tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+  .grp ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+  .grp li{margin:4px 0}
+  .meterwrap{display:flex;gap:26px;align-items:flex-end;justify-content:center;height:190px;background:#0b1020;border-radius:10px;padding:16px 10px 10px}
+  .meter{width:70px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:52px;border-radius:6px 6px 0 0;transition:height .05s linear}
+  .bar.svr{background:linear-gradient(#4aa3f6,#1c4a75)}
+  .bar.shunt{background:linear-gradient(#ff5d6c,#8a2530)}
+  .meter .mv{font-size:13px;font-weight:800;margin-top:6px}
+  .meter .mk{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .patient{width:70px;height:110px;border-radius:34px 34px 12px 12px;margin:0 auto;transition:background .3s}
+  .foot{color:var(--muted);font-size:12px;margin-top:6px}
+  .kv{font-size:13.5px;margin:2px 0}
+  .dot{fill:#fff;stroke:#0e1220;stroke-width:1}
+  .stage{background:#0b1020;border-radius:10px;padding:16px;text-align:center}
+  .part{cursor:pointer;transition:.15s}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:700px){.cmp{grid-template-columns:1fr}}
+  .cmp .col{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px;text-align:center}
+  .cmp .col.tof{border-top:4px solid var(--hi)}
+  .cmp .col.ta{border-top:4px solid var(--lo)}
+  .cmp .col h3{margin:6px 0 4px;font-size:15px}
+</style>
+
+<div class="wrap">
+  <h1>C2 - Cyanotic CHD with DECREASED pulmonary blood flow</h1>
+  <p class="sub">The DECREASED-flow branch of C1. Right-heart outflow obstruction pushes blood right-to-left into the aorta (blue baby, dark lungs). Anchors: Q8 a tet spell is treated with everything EXCEPT digoxin (an inotrope worsens the dynamic RVOT obstruction); Q19 cyanosis worse with crying + right axis + boot-shaped heart = tetralogy of Fallot (right axis nails it over tricuspid atresia's left axis).</p>
+
+  <!-- 1. DECREASED-FLOW PHYSIOLOGY -->
+  <div class="card">
+    <h2>1. The DECREASED-flow physiology: obstruct the lungs, shunt right-to-left (click to run the shunt)</h2>
+    <div class="flowwrap">
+      <div>
+        <svg id="physSvg" viewBox="0 0 380 300" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- ventricles -->
+          <rect x="70" y="150" width="90" height="110" rx="10" class="box"></rect>
+          <text x="115" y="245" text-anchor="middle" class="lbl">RV</text>
+          <rect x="160" y="150" width="90" height="110" rx="10" class="box"></rect>
+          <text x="205" y="245" text-anchor="middle" class="lbl">LV</text>
+          <!-- VSD gap in septum -->
+          <rect id="physVsd" x="152" y="170" width="16" height="34" rx="4" fill="#b57af6" opacity=".9"></rect>
+          <text x="160" y="160" text-anchor="middle" class="lbl sm">VSD</text>
+          <!-- aorta (overriding) -->
+          <path d="M180,150 L180,40 C180,26 210,26 210,40 L210,110" class="box" fill="none" stroke-width="2"></path>
+          <text x="230" y="60" text-anchor="middle" class="lbl sm">Aorta</text>
+          <!-- pulmonary artery narrowed -->
+          <path d="M110,150 L110,60" class="box" fill="none" stroke-width="2"></path>
+          <rect id="physObs" x="101" y="86" width="18" height="16" rx="3" fill="#f6a54a"></rect>
+          <text x="70" y="70" text-anchor="middle" class="lbl sm">Pulm</text>
+          <text x="70" y="83" text-anchor="middle" class="lbl sm">artery</text>
+          <text x="150" y="100" text-anchor="middle" class="lbl sm" fill="#f6a54a">obstruction</text>
+          <!-- dark lungs -->
+          <ellipse cx="70" cy="40" rx="26" ry="16" fill="#12161f" stroke="#2b3552"></ellipse>
+          <text x="70" y="44" text-anchor="middle" class="lbl sm">dark lungs</text>
+          <!-- shunt dot -->
+          <circle id="physDot" class="dot" r="6" cx="115" cy="205" fill="#ff5d6c"></circle>
+        </svg>
+        <p class="foot">RV outflow is obstructed, so RV pressure beats LV pressure and deoxygenated blood shunts <b style="color:#b57af6">right-to-left across the VSD</b> into the overriding aorta. Hand-drawn, nothing embedded.</p>
+      </div>
+      <div class="info">
+        <p class="name">Blue baby, dark lungs</p>
+        <p class="kv"><b>Chain:</b> RV outflow obstruction to RV pressure &gt; LV pressure to right-to-left shunt across the VSD into the aorta to <b>cyanosis</b> + <b>oligaemic (dark) lung fields</b>.</p>
+        <p class="kv" style="color:#95a1bd">The severest lesions (pulmonary atresia, critical PS, severe TOF) are <b>ductal-dependent</b>: lungs are perfused only backwards through the duct, so <b>PGE1</b> keeps it open (C1 Q6).</p>
+        <div class="grp dec" style="margin-top:10px">
+          <span class="tag" style="background:#3a2a12;color:#f6c98a">DECREASED (oligaemic, dark) = C2 lesions</span>
+          <ul>
+            <li>Tetralogy of Fallot (the anchor)</li>
+            <li>Tricuspid atresia (LEFT axis)</li>
+            <li>Pulmonary atresia (pure duct-dependent)</li>
+            <li>Critical pulmonary stenosis</li>
+            <li>Severe Ebstein anomaly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. INTERACTIVE TOF HEART -->
+  <div class="card">
+    <h2>2. Tetralogy of Fallot: one error, four features (click each to highlight it on the heart)</h2>
+    <div class="seg">
+      <button data-part="vsd" class="on">1. VSD (the escape door)</button>
+      <button data-part="ao">2. Overriding aorta</button>
+      <button data-part="ps">3. RVOT / pulmonary stenosis</button>
+      <button data-part="rvh">4. RV hypertrophy</button>
+    </div>
+    <div class="flowwrap">
+      <div>
+        <svg id="tofSvg" viewBox="0 0 400 320" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- LV -->
+          <path d="M200,150 L280,150 L280,290 L200,290 Z" class="box"></path>
+          <text x="240" y="275" text-anchor="middle" class="lbl">LV</text>
+          <!-- RV wall (rvh highlightable) -->
+          <path id="tRvh" class="part" d="M120,150 L200,150 L200,290 L120,290 Z" fill="#0b1020" stroke="#2b3552" stroke-width="1.5"></path>
+          <path id="tRvhWall" class="part" d="M120,150 L200,150 L200,290 L120,290" fill="none" stroke="#2b3552" stroke-width="6"></path>
+          <text x="160" y="275" text-anchor="middle" class="lbl">RV</text>
+          <!-- VSD -->
+          <rect id="tVsd" class="part" x="192" y="172" width="16" height="40" rx="4" fill="#b57af6" opacity=".9"></rect>
+          <!-- overriding aorta: straddles the septum -->
+          <path id="tAo" class="part" d="M170,150 L170,40 C170,22 230,22 230,40 L230,120" fill="none" stroke="#c95d6c" stroke-width="14" stroke-linecap="round" opacity=".85"></path>
+          <text x="252" y="55" text-anchor="middle" class="lbl sm">Aorta</text>
+          <!-- pulmonary artery + stenosis -->
+          <path d="M150,150 L150,60" class="box" fill="none" stroke-width="2"></path>
+          <rect id="tPs" class="part" x="139" y="92" width="22" height="18" rx="3" fill="#f6a54a"></rect>
+          <text x="110" y="70" text-anchor="middle" class="lbl sm">Pulmonary</text>
+          <text x="110" y="83" text-anchor="middle" class="lbl sm">artery</text>
+          <!-- atria hint -->
+          <rect x="200" y="120" width="80" height="26" rx="6" class="box"></rect>
+          <text x="240" y="138" text-anchor="middle" class="lbl sm">LA</text>
+          <rect x="120" y="120" width="80" height="26" rx="6" class="box"></rect>
+          <text x="160" y="138" text-anchor="middle" class="lbl sm">RA</text>
+        </svg>
+        <p class="foot">PROVe: Pulmonary stenosis, RVH, Overriding aorta, VSD. The RVOT obstruction is the driver; RVH is its consequence.</p>
+      </div>
+      <div class="info" id="tofInfo">
+        <p class="name" id="tofName">VSD</p>
+        <div id="tofBody"></div>
+      </div>
+    </div>
+    <div class="warnrule big">Q19: cyanosis worse with crying (spell), <b>right axis deviation + RVH</b> on ECG, and a <b>boot-shaped heart with dark lungs</b> on CXR = <b>tetralogy of Fallot</b>. The right axis is what separates it from tricuspid atresia (left axis).</div>
+  </div>
+
+  <!-- 3. BOOT-SHAPED HEART CXR -->
+  <div class="card">
+    <h2>3. The boot-shaped heart (coeur en sabot): the TOF chest X-ray</h2>
+    <div class="grid">
+      <div class="stage">
+        <svg viewBox="0 0 300 300" style="width:100%;height:auto;max-width:300px">
+          <!-- thorax -->
+          <rect x="20" y="20" width="260" height="260" rx="18" fill="#12161f" stroke="#2b3552" stroke-width="1.5"></rect>
+          <!-- spine -->
+          <rect x="146" y="24" width="8" height="252" fill="#1c2540"></rect>
+          <!-- dark lung fields -->
+          <ellipse cx="80" cy="130" rx="46" ry="80" fill="#0a0d14" stroke="#232b45"></ellipse>
+          <ellipse cx="220" cy="130" rx="46" ry="80" fill="#0a0d14" stroke="#232b45"></ellipse>
+          <!-- concave pulmonary bay marker -->
+          <path d="M150,110 C132,120 130,140 138,150" fill="none" stroke="#f6a54a" stroke-width="2.5" stroke-dasharray="4 3"></path>
+          <text x="96" y="98" text-anchor="middle" class="lbl sm" fill="#f6a54a">concave</text>
+          <text x="96" y="110" text-anchor="middle" class="lbl sm" fill="#f6a54a">pulmonary bay</text>
+          <!-- boot-shaped cardiac silhouette: upturned apex -->
+          <path d="M150,120
+                   C150,120 138,150 138,175
+                   C138,205 150,232 178,238
+                   C205,244 214,224 210,206
+                   C206,192 190,196 186,184
+                   C182,172 178,150 176,130
+                   C175,122 150,116 150,120 Z"
+                fill="#243049" stroke="#7aa2ff" stroke-width="2"></path>
+          <!-- upturned apex marker -->
+          <circle cx="204" cy="222" r="5" fill="#ff5d6c"></circle>
+          <text x="243" y="226" text-anchor="middle" class="lbl sm" fill="#ff9aa2">upturned</text>
+          <text x="243" y="238" text-anchor="middle" class="lbl sm" fill="#ff9aa2">apex</text>
+        </svg>
+      </div>
+      <div>
+        <p class="kv"><b style="color:#ff9aa2">Upturned apex:</b> the right-ventricular hypertrophy lifts the cardiac apex up and out (off the diaphragm) instead of pointing down.</p>
+        <p class="kv"><b style="color:#f6c98a">Concave pulmonary bay:</b> the small, obstructed pulmonary artery leaves an empty, scooped-out segment on the left heart border where the normal bulge would be.</p>
+        <p class="kv"><b>Dark lung fields:</b> decreased pulmonary vascularity, because less blood is reaching the lungs.</p>
+        <div class="rule" style="margin-top:10px">Upturned apex + concave (empty) pulmonary bay = a silhouette shaped like a <b>boot</b>. Pair it with the ECG (right axis + RVH) and the spell history and you have TOF.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. TET SPELL ANIMATION -->
+  <div class="card">
+    <h2>4. The tet spell: SVR drops, the shunt grows, the baby turns blue (click a treatment to reverse it)</h2>
+    <div class="seg" style="max-width:760px">
+      <button id="spellBtn" class="bad">Trigger a spell (crying: SVR drops, infundibulum spasms)</button>
+      <button id="kcBtn">Knee-chest / squat (raise SVR)</button>
+      <button id="o2Btn">Oxygen</button>
+      <button id="morphBtn">Morphine</button>
+      <button id="propBtn">Propranolol</button>
+      <button id="digBtn" class="bad">Digoxin</button>
+    </div>
+    <div class="grid">
+      <div class="meterwrap">
+        <div class="meter"><div class="bar svr" id="svrBar" style="height:70%"></div><div class="mv" id="svrV">NORMAL</div><div class="mk">SVR</div></div>
+        <div class="meter"><div class="bar shunt" id="shBar" style="height:30%"></div><div class="mv" id="shV">SMALL</div><div class="mk">R to L shunt</div></div>
+        <div class="meter" style="justify-content:flex-end"><div class="patient" id="spPatient" style="background:#c98fa6"></div><div class="mv" id="spFace" style="margin-top:8px">mild blue</div><div class="mk">baby</div></div>
+      </div>
+      <div>
+        <p class="name" id="spName" style="font-size:17px;font-weight:900;margin:0 0 6px">Resting TOF</p>
+        <div id="spBody"><p class="kv">Baseline: fixed obstruction, a small right-to-left shunt, mild cyanosis. Trigger a spell, then break it with a treatment.</p></div>
+      </div>
+    </div>
+    <div class="warnrule big">Q8: a tet spell is treated with all EXCEPT <b>digoxin</b>. It is a positive inotrope, so more contractility TIGHTENS the dynamic infundibular obstruction and DEEPENS the shunt. Correct moves RAISE SVR (knee-chest, squat, phenylephrine, fluids) or RELAX the infundibulum / break the cycle (O2, morphine, propranolol, bicarbonate).</div>
+  </div>
+
+  <!-- 5. TOF vs TRICUSPID ATRESIA AXIS -->
+  <div class="card">
+    <h2>5. The axis discriminator: TOF (right axis) vs tricuspid atresia (left axis)</h2>
+    <div class="cmp">
+      <div class="col tof">
+        <svg viewBox="0 0 140 140" style="width:120px;height:120px">
+          <circle cx="70" cy="70" r="56" fill="none" stroke="#2b3552" stroke-width="1.5"></circle>
+          <line x1="14" y1="70" x2="126" y2="70" stroke="#2b3552"></line>
+          <line x1="70" y1="14" x2="70" y2="126" stroke="#2b3552"></line>
+          <!-- right axis: pointing down-right (+120) -->
+          <line x1="70" y1="70" x2="110" y2="118" stroke="#ff5d6c" stroke-width="4" marker-end="url(#arR)"></line>
+          <defs><marker id="arR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ff5d6c"></path></marker></defs>
+        </svg>
+        <h3 style="color:#ff9aa2">Tetralogy of Fallot</h3>
+        <p class="kv"><b>RIGHT axis deviation (~+120) + RVH.</b></p>
+        <p class="kv" style="color:#95a1bd">RV pumps against the outflow obstruction, so it hypertrophies and the axis swings right. Boot-shaped heart, spells, formed RV.</p>
+      </div>
+      <div class="col ta">
+        <svg viewBox="0 0 140 140" style="width:120px;height:120px">
+          <circle cx="70" cy="70" r="56" fill="none" stroke="#2b3552" stroke-width="1.5"></circle>
+          <line x1="14" y1="70" x2="126" y2="70" stroke="#2b3552"></line>
+          <line x1="70" y1="14" x2="70" y2="126" stroke="#2b3552"></line>
+          <!-- left axis: pointing up-left -->
+          <line x1="70" y1="70" x2="26" y2="40" stroke="#4aa3f6" stroke-width="4" marker-end="url(#arL)"></line>
+          <defs><marker id="arL" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4aa3f6"></path></marker></defs>
+        </svg>
+        <h3 style="color:#8ac6f6">Tricuspid atresia</h3>
+        <p class="kv"><b>LEFT axis deviation.</b></p>
+        <p class="kv" style="color:#95a1bd">No tricuspid valve, so the RV is hypoplastic and the LV dominates: the axis swings LEFT. Obligatory right-to-left across the ASD.</p>
+      </div>
+    </div>
+    <div class="rule"><b>The discriminator in Q19:</b> both are cyanotic decreased-flow lesions, but a LEFT axis points to tricuspid atresia and a RIGHT axis (as in the stem, +120) points to TOF.</div>
+    <div class="warnrule"><b>Pulmonary atresia</b> (concept 5): no RV-to-lung outlet at all, so lung flow is <b>100% ductal-dependent</b>. Duct closes to severe cyanosis in the first days. Treat with <b>PGE1</b> (C1 Q6 logic). Intact ventricular septum = small RV.</div>
+  </div>
+
+  <p class="foot">C2 visual - Module 5 CHD. All diagrams hand-drawn inline SVG, fully self-contained, no external assets.</p>
+</div>
+
+<script>
+(function(){
+  // ---------- 1. Physiology shunt dot ----------
+  var pDot=document.getElementById('physDot');
+  var pPts=[[205,205],[160,190],[160,120],[195,60]]; // RV -> across VSD -> up aorta
+  var pt=0;
+  function animPhys(){
+    var n=pPts.length-1;
+    pt+=0.006; if(pt>=1)pt=0;
+    var seg=Math.min(Math.floor(pt*n),n-1), f=pt*n-seg;
+    var a=pPts[seg], b=pPts[seg+1];
+    pDot.setAttribute('cx',a[0]+(b[0]-a[0])*f);
+    pDot.setAttribute('cy',a[1]+(b[1]-a[1])*f);
+    requestAnimationFrame(animPhys);
+  }
+  animPhys();
+
+  // ---------- 2. Interactive TOF heart ----------
+  var parts={
+    vsd:{name:'1. VSD (ventricular septal defect)',el:'tVsd',
+      body:'<p><b>The escape door.</b> A large hole in the interventricular septum. Because the RV outflow is obstructed, RV pressure exceeds LV pressure and deoxygenated blood shunts <b>right-to-left through this VSD</b> into the aorta.</p><p style="color:#95a1bd">Not the cause of the cyanosis by itself: the obstruction sets how much blood is diverted through it.</p>'},
+    ao:{name:'2. Overriding aorta',el:'tAo',
+      body:'<p><b>Sits astride the VSD.</b> The aorta straddles both ventricles, so it collects blood from the RV as well as the LV, literally receiving the deoxygenated right-heart blood and carrying it to the body.</p>'},
+    ps:{name:'3. RVOT / pulmonary stenosis',el:'tPs',
+      body:'<p><b>The driver.</b> Narrowing below and at the pulmonary valve (infundibular + valvar). It determines how blue the baby is, and its muscular (infundibular) part is what <b>SPASMS in a tet spell</b>.</p><p style="color:#95a1bd">Grade the cyanosis by this obstruction, not by the VSD size.</p>'},
+    rvh:{name:'4. Right-ventricular hypertrophy',el:'tRvh',
+      body:'<p><b>The consequence.</b> The RV wall thickens because it pumps against the outflow obstruction at systemic pressures. This is what <b>upturns the cardiac apex</b> on the X-ray (the boot) and gives the ECG its right axis + RVH.</p>'}
+  };
+  var curPart='vsd';
+  function selPart(k){
+    curPart=k;
+    document.querySelectorAll('[data-part]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-part')===k);});
+    // reset highlights
+    ['tVsd','tAo','tPs'].forEach(function(id){var e=document.getElementById(id);e.setAttribute('stroke','none');e.style.filter='';});
+    document.getElementById('tRvhWall').setAttribute('stroke','#2b3552');
+    document.getElementById('tVsd').setAttribute('opacity','.9');
+    document.getElementById('tAo').setAttribute('opacity','.85');
+    var s=parts[k];
+    var el=document.getElementById(s.el);
+    if(k==='rvh'){ document.getElementById('tRvhWall').setAttribute('stroke','#ffd166'); }
+    else if(k==='ao'){ el.setAttribute('opacity','1'); el.setAttribute('stroke','#ffd166'); el.setAttribute('stroke-width','16'); }
+    else { el.setAttribute('opacity','1'); el.setAttribute('stroke','#ffd166'); el.setAttribute('stroke-width','2.5'); }
+    document.getElementById('tofName').textContent=s.name;
+    document.getElementById('tofBody').innerHTML=s.body;
+  }
+  document.querySelectorAll('[data-part]').forEach(function(b){b.addEventListener('click',function(){selPart(b.getAttribute('data-part'));});});
+  // clicking the anatomy also selects
+  [['tVsd','vsd'],['tAo','ao'],['tPs','ps'],['tRvh','rvh']].forEach(function(pair){
+    var e=document.getElementById(pair[0]); if(e)e.addEventListener('click',function(){selPart(pair[1]);});
+  });
+  selPart('vsd');
+
+  // ---------- 4. Tet spell ----------
+  var svrBar=document.getElementById('svrBar'), shBar=document.getElementById('shBar'), pat=document.getElementById('spPatient');
+  var svrTgt=70, shTgt=30, svrCur=70, shCur=30;   // baseline
+  function setState(name,body,svr,sh){
+    svrTgt=svr; shTgt=sh;
+    document.getElementById('spName').textContent=name;
+    document.getElementById('spBody').innerHTML=body;
+  }
+  var btns={spell:'spellBtn',kc:'kcBtn',o2:'o2Btn',morph:'morphBtn',prop:'propBtn',dig:'digBtn'};
+  function lightBtn(k){Object.keys(btns).forEach(function(x){document.getElementById(btns[x]).classList.toggle('on',x===k);});}
+  document.getElementById('spellBtn').addEventListener('click',function(){
+    lightBtn('spell');
+    setState('SPELL: hypercyanotic','<p class="kv"><b>Crying drops SVR and the infundibulum spasms.</b> RV pressure climbs, the right-to-left shunt balloons, and deoxygenated blood floods the aorta: the baby goes deeply blue. Hypoxia + acidosis drive hyperpnoea, dropping SVR further (vicious cycle).</p>',18,88);
+  });
+  function treat(k,label,text,svr,sh){
+    document.getElementById(k).addEventListener('click',function(){
+      var kk=Object.keys(btns).find(function(x){return btns[x]===k;});
+      lightBtn(kk);
+      setState(label,text,svr,sh);
+    });
+  }
+  treat('kcBtn','Knee-chest / squat: SVR UP','<p class="kv"><b>Kinks the femoral arteries, raising SVR.</b> Aortic pressure now beats right-heart pressure, so the shunt swings back toward left-to-right. First, free, immediate move. The baby pinks up.</p>',86,18);
+  treat('o2Btn','Oxygen','<p class="kv"><b>Improves oxygenation and helps relax pulmonary vessels.</b> Supportive: give it alongside position and drugs while the spell breaks.</p>',60,40);
+  treat('morphBtn','Morphine','<p class="kv"><b>Calms the child, abolishes the hyperpnoea, and relaxes the infundibulum</b>, breaking the vicious cycle. A key spell drug.</p>',72,26);
+  treat('propBtn','Propranolol (beta-blocker)','<p class="kv"><b>Relaxes the dynamic infundibular muscle and slows the heart rate</b> (more filling time). Used acutely IV and orally for prevention.</p>',74,22);
+  document.getElementById('digBtn').addEventListener('click',function(){
+    lightBtn('dig');
+    setState('Digoxin: WRONG (Q8 answer)','<p class="kv" style="color:#ff9aa2"><b>Positive inotrope: increases contractility, which TIGHTENS the dynamic infundibular obstruction and DEEPENS the right-to-left shunt.</b> Contraindicated in a tet spell. This is why D is the exception in Q8.</p>',16,95);
+  });
+  function faceFor(sh){
+    if(sh>=80)return['#4a5fa0','deep blue'];
+    if(sh>=55)return['#7a6fb0','blue'];
+    if(sh>=35)return['#b07fa0','dusky'];
+    return['#d59aa8','pink again'];
+  }
+  function animSpell(){
+    svrCur+=(svrTgt-svrCur)*0.08; shCur+=(shTgt-shCur)*0.08;
+    svrBar.style.height=svrCur.toFixed(1)+'%'; shBar.style.height=shCur.toFixed(1)+'%';
+    document.getElementById('svrV').textContent=svrCur>78?'HIGH':(svrCur<35?'LOW':'NORMAL');
+    document.getElementById('shV').textContent=shCur>75?'HUGE':(shCur<25?'SMALL':'BIG');
+    var f=faceFor(shCur); pat.style.background=f[0]; document.getElementById('spFace').textContent=f[1];
+    requestAnimationFrame(animSpell);
+  }
+  animSpell();
+})();
+</script>

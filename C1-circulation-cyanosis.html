@@ -1,0 +1,370 @@
+<meta charset="utf-8">
+<title>C1 - Circulation and cyanosis</title>
+<style>
+  :root{--bg:#0e1220;--panel:#161c2e;--ink:#e8ecf5;--muted:#95a1bd;--accent:#7aa2ff;--pos:#38a169;--neg:#e53e3e;--iso:#718096;--warn:#e0a53e;--hi:#ff5d6c;--mix:#b57af6;--lo:#4aa3f6;--norm:#63d29b;--dec:#f6a54a;--inc:#4aa3f6}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .card{background:var(--panel);border:1px solid #232b45;border-radius:14px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .seg button{flex:1;min-width:150px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
+  .seg button:hover{border-color:var(--accent)}
+  .rule{background:#1c2540;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .warnrule{background:#3a2f16;border-left:3px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .big{font-size:15px;font-weight:900;color:#fff}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .flowwrap{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+  @media(max-width:820px){.flowwrap{grid-template-columns:1fr}}
+  .box{fill:#0b1020;stroke:#2b3552;stroke-width:1.5}
+  .lbl{fill:#cdd6ea;font:600 12px sans-serif}
+  .lbl.sm{font:600 10.5px sans-serif;fill:#95a1bd}
+  .vessel{fill:none;stroke-width:9;stroke-linecap:round;opacity:.32}
+  .vessel.act{opacity:1}
+  .info{background:#0b1020;border-radius:10px;padding:14px;border-left:4px solid var(--accent)}
+  .info .name{font-size:18px;font-weight:900;margin:0 0 2px}
+  .info .sat{display:inline-block;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;margin:4px 0 10px}
+  .info p{font-size:13.5px;margin:6px 0 0}
+  .grp{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px}
+  .grp.dec{border-top:4px solid var(--dec)}
+  .grp.inc{border-top:4px solid var(--inc)}
+  .grp h3{margin:0 0 6px;font-size:15px}
+  .grp .tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+  .grp ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+  .grp li{margin:4px 0}
+  .meterwrap{display:flex;gap:26px;align-items:flex-end;justify-content:center;height:190px;background:#0b1020;border-radius:10px;padding:16px 10px 10px}
+  .meter{width:70px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .bar{width:52px;border-radius:6px 6px 0 0;transition:height .05s linear}
+  .bar.pvr{background:linear-gradient(#ff5d6c,#8a2530)}
+  .bar.svr{background:linear-gradient(#4aa3f6,#1c4a75)}
+  .meter .mv{font-size:13px;font-weight:800;margin-top:6px}
+  .meter .mk{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .shuntchip{display:inline-flex;align-items:center;gap:6px;background:#0b1020;border:1px solid #2b3552;border-radius:8px;padding:8px 12px;margin:6px 8px 0 0;font-size:13px;font-weight:700;transition:.4s}
+  .shuntchip.shut{border-color:var(--neg);color:#ff9aa2;text-decoration:line-through;opacity:.75}
+  .patient{width:70px;height:110px;border-radius:34px 34px 12px 12px;margin:0 auto;transition:background .3s}
+  .slider{width:100%;margin:14px 0 6px}
+  .readout{font-size:14px}
+  .readout b.blue{color:#4aa3f6}
+  .ductstage{background:#0b1020;border-radius:10px;padding:16px;text-align:center}
+  .lung{font-size:13px;font-weight:800;margin-top:10px}
+  .foot{color:var(--muted);font-size:12px;margin-top:6px}
+  .kv{font-size:13.5px;margin:2px 0}
+  .hidden{display:none}
+  .dot{fill:#fff;stroke:#0e1220;stroke-width:1}
+</style>
+
+<div class="wrap">
+  <h1>C1 - Circulation and cyanosis</h1>
+  <p class="sub">Fetal shunts, the first-breath transition, the cyanosis threshold, and PGE1. Exam anchors: Q12 the umbilical VEIN carries the highest oxygenated blood; Q6 a cyanotic defect with DECREASED pulmonary flow is treated first with PGE1 (keeps the duct open), never indomethacin.</p>
+
+  <!-- 1. FETAL CIRCULATION -->
+  <div class="card">
+    <h2>1. Fetal circulation: click a shunt to trace it (route + O2 saturation animate inline)</h2>
+    <div class="seg">
+      <button data-shunt="uv" class="on">Umbilical vein (in from placenta)</button>
+      <button data-shunt="dv">Ductus venosus (skip liver)</button>
+      <button data-shunt="fo">Foramen ovale (RA to LA)</button>
+      <button data-shunt="da">Ductus arteriosus (skip lungs)</button>
+      <button data-shunt="ua">Umbilical arteries (out to placenta)</button>
+    </div>
+    <div class="flowwrap">
+      <div>
+        <svg id="fetalSvg" viewBox="0 0 460 480" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- vessels (drawn first, under boxes) -->
+          <!-- umbilical vein: placenta up to liver/IVC -->
+          <path id="v-uv" class="vessel" stroke="#ff5d6c" d="M230,452 C170,430 150,400 150,368"></path>
+          <!-- ductus venosus: liver through to IVC then RA -->
+          <path id="v-dv" class="vessel" stroke="#ff8a5d" d="M150,340 C150,315 205,300 205,300 L205,238"></path>
+          <!-- IVC into RA -->
+          <path class="vessel act" stroke="#c06fd6" d="M188,238 L216,238" opacity=".4"></path>
+          <!-- foramen ovale: RA to LA -->
+          <path id="v-fo" class="vessel" stroke="#c06fd6" d="M200,214 L256,214"></path>
+          <!-- ductus arteriosus: PA to aortic arch -->
+          <path id="v-da" class="vessel" stroke="#4aa3f6" d="M168,96 C168,70 235,70 250,86"></path>
+          <!-- descending aorta to umbilical arteries -->
+          <path id="v-ua" class="vessel" stroke="#4aa3f6" d="M260,150 C306,220 306,360 251,452"></path>
+
+          <!-- placenta -->
+          <ellipse cx="230" cy="458" rx="70" ry="16" class="box" fill="#2a1720" stroke="#7a3550"></ellipse>
+          <text x="230" y="462" text-anchor="middle" class="lbl">Placenta</text>
+
+          <!-- liver -->
+          <rect x="110" y="330" width="80" height="40" rx="8" class="box"></rect>
+          <text x="150" y="354" text-anchor="middle" class="lbl">Liver</text>
+
+          <!-- atria -->
+          <rect x="228" y="188" width="64" height="52" rx="8" class="box"></rect>
+          <text x="260" y="210" text-anchor="middle" class="lbl">LA</text>
+          <rect x="164" y="188" width="64" height="52" rx="8" class="box"></rect>
+          <text x="196" y="210" text-anchor="middle" class="lbl">RA</text>
+          <!-- ventricles -->
+          <rect x="228" y="244" width="64" height="56" rx="8" class="box"></rect>
+          <text x="260" y="276" text-anchor="middle" class="lbl">LV</text>
+          <rect x="164" y="244" width="64" height="56" rx="8" class="box"></rect>
+          <text x="196" y="276" text-anchor="middle" class="lbl">RV</text>
+
+          <!-- great vessels -->
+          <path d="M196,244 L168,244 L168,96" class="box" fill="none"></path>
+          <text x="128" y="120" text-anchor="middle" class="lbl sm">Pulmonary</text>
+          <text x="128" y="133" text-anchor="middle" class="lbl sm">artery</text>
+          <path d="M260,244 L260,150" class="box" fill="none"></path>
+          <text x="306" y="140" text-anchor="middle" class="lbl sm">Aorta</text>
+          <!-- SVC -->
+          <path d="M196,182 L196,120" class="box" fill="none"></path>
+          <text x="196" y="112" text-anchor="middle" class="lbl sm">SVC</text>
+
+          <!-- moving dot -->
+          <circle id="fdot" class="dot" r="6" cx="230" cy="452"></circle>
+        </svg>
+        <p class="foot">Colour = oxygen saturation: <span style="color:#ff5d6c">red high</span>, <span style="color:#c06fd6">purple mixed</span>, <span style="color:#4aa3f6">blue low</span>. Hand-drawn schematic, nothing embedded from the web.</p>
+      </div>
+      <div class="info" id="fInfo">
+        <p class="name" id="fName">Umbilical vein</p>
+        <span class="sat" id="fSat">~ 80 to 85% (highest)</span>
+        <div id="fBody"></div>
+      </div>
+    </div>
+    <div class="warnrule big">Q12: the umbilical <b>VEIN</b> carries the HIGHEST oxygenated blood (from placenta to fetus). The umbilical <b>arteries</b> carry the LOWEST (deoxygenated, back to placenta). Aorta = mixed, vitelline veins = yolk sac, cardinal veins = deoxygenated body.</div>
+  </div>
+
+  <!-- 2. TRANSITION -->
+  <div class="card">
+    <h2>2. The first breath: watch PVR drop and the shunts snap shut</h2>
+    <div class="seg" style="max-width:520px">
+      <button id="breathBtn">Take the first breath</button>
+      <button id="resetBtn">Reset to fetal state</button>
+    </div>
+    <div class="grid">
+      <div class="meterwrap">
+        <div class="meter"><div class="bar pvr" id="pvrBar" style="height:88%"></div><div class="mv" id="pvrV">HIGH</div><div class="mk">PVR</div></div>
+        <div class="meter"><div class="bar svr" id="svrBar" style="height:34%"></div><div class="mv" id="svrV">LOW</div><div class="mk">SVR</div></div>
+      </div>
+      <div>
+        <div id="chipFO" class="shuntchip">Foramen ovale: OPEN</div>
+        <div id="chipDA" class="shuntchip">Ductus arteriosus: OPEN</div>
+        <div id="chipDV" class="shuntchip">Ductus venosus: OPEN</div>
+        <div class="rule" id="transText" style="margin-top:12px">Fetal state: lungs collapsed, PVR high, most blood bypasses the lungs. Click "first breath" to run the switch.</div>
+      </div>
+    </div>
+    <div class="warnrule">Chain: first breath <b>drops PVR</b>, cord clamp <b>raises SVR</b>, lung return raises LA pressure above RA so the <b>foramen ovale shuts</b>, and <b>rising O2 + falling prostaglandins shut the ductus arteriosus</b>. PVR keeps drifting down for <b>6 to 8 weeks</b> (why left-to-right shunts present late).</div>
+  </div>
+
+  <!-- 3. CYANOSIS THRESHOLD -->
+  <div class="card">
+    <h2>3. The cyanosis threshold: why anaemic patients cyanose late, polycythaemic early</h2>
+    <div class="grid">
+      <div>
+        <div class="ductstage">
+          <div class="patient" id="cyPatient" style="background:#e7b48a"></div>
+          <p class="kv" id="cyFace" style="margin-top:10px;font-weight:800">Pink</p>
+        </div>
+      </div>
+      <div>
+        <p class="kv">Total haemoglobin: <b id="hbVal">15</b> g/dL</p>
+        <input class="slider" id="hbSlider" type="range" min="4" max="22" value="15" step="1">
+        <div class="seg" style="font-size:12px;color:var(--muted);margin:0 0 8px"><span>anaemic 4</span><span style="text-align:right;flex:1">22 polycythaemic</span></div>
+        <p class="readout" id="cyRead"></p>
+        <div class="rule" style="margin-top:10px">Cyanosis needs an <b>absolute 3 to 5 g/dL of reduced (blue) haemoglobin</b>, not a saturation. Formula: reduced Hb = Hb x (1 - SpO2). Solve for 5 g/dL: <b>SpO2 = 1 - 5/Hb</b>.</div>
+      </div>
+    </div>
+    <div class="warnrule"><b>Polycythaemia = blue EARLY</b> (reaches 5 g/dL of reduced Hb at a high saturation). <b>Anaemia = blue LATE or never</b> (too little Hb to make 5 g/dL blue, so hypoxic but PINK). Never clear hypoxia by colour without knowing the Hb.</div>
+  </div>
+
+  <!-- 4. DUCTAL-DEPENDENT + PGE1 -->
+  <div class="card">
+    <h2>4. Ductal-dependent lesion: PGE1 opens the duct, indomethacin closes it</h2>
+    <div class="seg" style="max-width:640px">
+      <button id="pgeBtn" class="on">Give PGE1 (replace prostaglandin)</button>
+      <button id="indoBtn">Give indomethacin / O2 (block prostaglandin)</button>
+    </div>
+    <div class="grid">
+      <div class="ductstage">
+        <svg viewBox="0 0 260 150" style="width:100%;height:auto">
+          <rect x="18" y="30" width="60" height="90" rx="8" class="box"></rect>
+          <text x="48" y="80" text-anchor="middle" class="lbl">Aorta</text>
+          <rect x="182" y="30" width="60" height="90" rx="8" class="box"></rect>
+          <text x="212" y="72" text-anchor="middle" class="lbl sm">Pulm</text>
+          <text x="212" y="86" text-anchor="middle" class="lbl sm">artery</text>
+          <!-- duct channel -->
+          <rect id="ductCh" x="78" y="62" width="104" height="26" rx="13" fill="#4aa3f6" opacity=".9"></rect>
+          <text x="130" y="112" text-anchor="middle" class="lbl sm">ductus arteriosus</text>
+          <circle id="ductDot" class="dot" r="6" cx="90" cy="75"></circle>
+        </svg>
+      </div>
+      <div>
+        <p class="name" id="ductName" style="font-size:18px;font-weight:900;margin:0 0 6px;color:var(--norm)">Duct OPEN</p>
+        <div id="ductBody"></div>
+        <p class="lung" id="ductLung" style="color:var(--norm)">Lungs perfused: cyanosis relieved</p>
+      </div>
+    </div>
+    <div class="warnrule big">Q6: cyanotic defect + DECREASED pulmonary flow = ductal-dependent-pulmonary lesion. First treatment = <b>Prostaglandin E1 (keep the duct OPEN)</b>. Indomethacin is the impostor (it CLOSES the duct, used for PDA in preemies). Digoxin and epinephrine do nothing to the duct.</div>
+  </div>
+
+  <!-- 5. MASTER FRAMEWORK -->
+  <div class="card">
+    <h2>5. Master framework: cyanotic CHD splits by pulmonary blood flow (spine of C2 and C3)</h2>
+    <p style="margin:0 0 12px;font-size:14px">Blue baby: look at the chest X-ray lung fields and sort into ONE of two buckets.</p>
+    <div class="grid">
+      <div class="grp dec">
+        <span class="tag" style="background:#3a2a12;color:#f6c98a">DECREASED (oligaemic, dark) = C2</span>
+        <h3>Too little lung blood flow: OBSTRUCTION</h3>
+        <p class="kv" style="color:var(--muted)">Blocked path to the lungs, usually <b>ductal-dependent, needs PGE1</b>.</p>
+        <ul>
+          <li>Tetralogy of Fallot</li>
+          <li>Tricuspid atresia</li>
+          <li>Pulmonary atresia</li>
+          <li>Critical pulmonary stenosis</li>
+          <li>Severe Ebstein anomaly</li>
+        </ul>
+      </div>
+      <div class="grp inc">
+        <span class="tag" style="background:#12293a;color:#8ac6f6">INCREASED (plethoric, congested) = C3</span>
+        <h3>Too much lung blood flow: MIXING / TRANSPOSITION</h3>
+        <p class="kv" style="color:var(--muted)">Blood reaches the lungs fine but is not separated from deoxygenated blood.</p>
+        <ul>
+          <li>D-transposition of the great arteries (D-TGA)</li>
+          <li>Total anomalous pulmonary venous return (TAPVR)</li>
+          <li>Truncus arteriosus</li>
+          <li>Single ventricle</li>
+          <li>Double-outlet right ventricle (DORV)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rule"><b>The 5 Ts (numbered by the number in the T):</b> 1 Truncus, 2 Transposition (D-TGA), 3 Tricuspid atresia, 4 Tetralogy, 5 TAPVR. Sort by FLOW not by letter: Tricuspid atresia and Tetralogy are DECREASED (obstruction); Truncus, Transposition and TAPVR are INCREASED (mixing).</div>
+  </div>
+
+  <p class="foot">C1 visual - Module 5 CHD. All diagrams hand-drawn inline SVG, fully self-contained, no external assets.</p>
+</div>
+
+<script>
+(function(){
+  // ---------- 1. Fetal circulation ----------
+  var shunts={
+    uv:{name:'Umbilical vein',sat:'~ 80 to 85% (HIGHEST)',col:'#ff5d6c',path:'v-uv',pts:[[230,452],[170,420],[150,368]],
+      body:'<p><b>The most oxygenated vessel in the fetus.</b> Carries fresh oxygenated blood FROM the placenta TO the fetus. This is Q12: the answer is the umbilical VEIN.</p><p style="color:#95a1bd">Becomes the <b>ligamentum teres</b> after birth.</p>'},
+    dv:{name:'Ductus venosus',sat:'~ 70% (still rich)',col:'#ff8a5d',path:'v-dv',pts:[[150,340],[150,310],[205,300],[205,240]],
+      body:'<p><b>Skips the liver.</b> Shunts the oxygenated umbilical-vein blood straight past the liver into the IVC, so the best blood is not wasted on the liver, then on to the right atrium.</p><p style="color:#95a1bd">Becomes the <b>ligamentum venosum</b>.</p>'},
+    fo:{name:'Foramen ovale',sat:'~ 65% (feeds the brain)',col:'#c06fd6',path:'v-fo',pts:[[200,214],[256,214]],
+      body:'<p><b>RA to LA, right-to-left.</b> Sends the oxygenated IVC stream from the right atrium into the LEFT atrium, so it goes LV to aorta to the coronaries and BRAIN with the best available blood.</p><p style="color:#95a1bd">Becomes the <b>fossa ovalis</b>.</p>'},
+    da:{name:'Ductus arteriosus',sat:'~ 55 to 60% (mixed, low)',col:'#4aa3f6',path:'v-da',pts:[[168,96],[168,70],[235,70],[250,86]],
+      body:'<p><b>Skips the lungs.</b> Because fetal PVR is HIGH, deoxygenated right-ventricle/pulmonary-artery blood is shunted into the DESCENDING aorta instead of the lungs, supplying the lower body.</p><p style="color:#95a1bd">Becomes the <b>ligamentum arteriosum</b>. This is the duct that PGE1 keeps open (card 4).</p>'},
+    ua:{name:'Umbilical arteries',sat:'~ 55% (LOWEST, out)',col:'#4aa3f6',path:'v-ua',pts:[[260,150],[300,260],[251,452]],
+      body:'<p><b>Carry the LEAST oxygenated blood.</b> Take deoxygenated blood from the fetus BACK to the placenta to be re-oxygenated. The naming is the reverse of adult logic (Q12 trap).</p><p style="color:#95a1bd">Become the <b>medial umbilical ligaments</b>.</p>'},
+  };
+  var cur='uv', t=0;
+  var dot=document.getElementById('fdot');
+  function selShunt(k){
+    cur=k; t=0;
+    document.querySelectorAll('[data-shunt]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-shunt')===k);});
+    document.querySelectorAll('#fetalSvg .vessel').forEach(function(v){if(v.id&&v.id.indexOf('v-')===0)v.classList.remove('act');});
+    var s=shunts[k];
+    var pel=document.getElementById(s.path); if(pel)pel.classList.add('act');
+    document.getElementById('fName').textContent=s.name;
+    var sat=document.getElementById('fSat'); sat.textContent=s.sat; sat.style.background=s.col+'33'; sat.style.color=s.col;
+    document.getElementById('fBody').innerHTML=s.body;
+    document.getElementById('fInfo').style.borderLeftColor=s.col;
+    dot.setAttribute('fill',s.col);
+  }
+  document.querySelectorAll('[data-shunt]').forEach(function(b){b.addEventListener('click',function(){selShunt(b.getAttribute('data-shunt'));});});
+  function animFetal(){
+    var pts=shunts[cur].pts, n=pts.length-1;
+    t+=0.006; if(t>=1)t=0;                // calm loop
+    var seg=Math.min(Math.floor(t*n),n-1), f=t*n-seg;
+    var a=pts[seg], b=pts[seg+1];
+    dot.setAttribute('cx',a[0]+(b[0]-a[0])*f);
+    dot.setAttribute('cy',a[1]+(b[1]-a[1])*f);
+    requestAnimationFrame(animFetal);
+  }
+  selShunt('uv'); animFetal();
+
+  // ---------- 2. Transition ----------
+  var pvrBar=document.getElementById('pvrBar'), svrBar=document.getElementById('svrBar');
+  var pvrTgt=88, svrTgt=34, pvrCur=88, svrCur=34, born=false;
+  function setChips(shut){
+    ['chipFO','chipDA','chipDV'].forEach(function(id){document.getElementById(id).classList.toggle('shut',shut);});
+    document.getElementById('chipFO').textContent='Foramen ovale: '+(shut?'SHUT (fossa ovalis)':'OPEN');
+    document.getElementById('chipDA').textContent='Ductus arteriosus: '+(shut?'SHUT (ligamentum arteriosum)':'OPEN');
+    document.getElementById('chipDV').textContent='Ductus venosus: '+(shut?'SHUT (ligamentum venosum)':'OPEN');
+  }
+  document.getElementById('breathBtn').addEventListener('click',function(){
+    born=true; pvrTgt=20; svrTgt=82;
+    document.getElementById('transText').innerHTML='<b>Born:</b> PVR collapsed, SVR rose, LA pressure now exceeds RA so the foramen ovale shut, and rising O2 with falling prostaglandins shut the ductus arteriosus.';
+    setTimeout(function(){setChips(true);},700);
+  });
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    born=false; pvrTgt=88; svrTgt=34; setChips(false);
+    document.getElementById('transText').innerHTML='Fetal state: lungs collapsed, PVR high, most blood bypasses the lungs. Click "first breath" to run the switch.';
+  });
+  function animMeters(){
+    pvrCur+=(pvrTgt-pvrCur)*0.08; svrCur+=(svrTgt-svrCur)*0.08;   // calm easing
+    pvrBar.style.height=pvrCur.toFixed(1)+'%'; svrBar.style.height=svrCur.toFixed(1)+'%';
+    document.getElementById('pvrV').textContent=born?'LOW':'HIGH';
+    document.getElementById('svrV').textContent=born?'HIGH':'LOW';
+    requestAnimationFrame(animMeters);
+  }
+  setChips(false); animMeters();
+
+  // ---------- 3. Cyanosis threshold ----------
+  var hb=document.getElementById('hbSlider');
+  function cyUpdate(){
+    var H=+hb.value;
+    document.getElementById('hbVal').textContent=H;
+    var spo2=1-5/H;                        // SpO2 at which reduced Hb hits 5 g/dL
+    var read=document.getElementById('cyRead');
+    var patient=document.getElementById('cyPatient'), face=document.getElementById('cyFace');
+    if(spo2<=0){
+      read.innerHTML='At Hb '+H+' g/dL you can <b class="blue">never reach 5 g/dL</b> of reduced haemoglobin. This patient can be <b>profoundly hypoxic and still look PINK</b> (cyanose late or never).';
+      patient.style.background='#e7b48a'; face.textContent='Pink (but can be dangerously hypoxic)';
+    } else {
+      var pct=Math.round(spo2*100);
+      var tone = H>=18 ? 'EARLY (polycythaemic: looks blue while barely hypoxic)' : (H<=8 ? 'very LATE (anaemic: must be severely hypoxic first)' : 'around this saturation');
+      read.innerHTML='Cyanosis appears once SpO2 falls to about <b class="blue">'+pct+'%</b> (that is where reduced Hb = 5 g/dL). This patient cyanoses <b>'+tone+'</b>.';
+      // colour the patient bluer the higher the threshold saturation (earlier cyanosis)
+      var blueMix=Math.max(0,Math.min(1,(spo2-0.3)/0.5));
+      var r=Math.round(231-140*blueMix), g=Math.round(180-90*blueMix), b=Math.round(138+100*blueMix);
+      patient.style.background='rgb('+r+','+g+','+b+')';
+      face.textContent = H>=18 ? 'Cyanoses EARLY' : (H<=8 ? 'Cyanoses LATE' : 'Cyanoses at SpO2 ~'+pct+'%');
+    }
+  }
+  hb.addEventListener('input',cyUpdate); cyUpdate();
+
+  // ---------- 4. Ductal-dependent + PGE1 ----------
+  var ductCh=document.getElementById('ductCh'), ductDot=document.getElementById('ductDot');
+  var ductTgt=26, ductCur=26, ductOpen=true, dt=0;
+  function setDuct(open){
+    ductOpen=open; ductTgt=open?26:2;
+    document.getElementById('pgeBtn').classList.toggle('on',open);
+    document.getElementById('indoBtn').classList.toggle('on',!open);
+    var nm=document.getElementById('ductName'), body=document.getElementById('ductBody'), lung=document.getElementById('ductLung');
+    if(open){
+      nm.textContent='Duct OPEN (PGE1)'; nm.style.color='#63d29b';
+      body.innerHTML='<p class="kv"><b>PGE1 (alprostadil)</b> replaces the prostaglandin that keeps the duct open. Blood flows aorta to duct to pulmonary artery, so the lungs are perfused.</p><p class="kv" style="color:#95a1bd">The emergency drug for a sick ductal-dependent newborn. Buys time until surgery.</p>';
+      lung.textContent='Lungs perfused: cyanosis relieved'; lung.style.color='#63d29b';
+    } else {
+      nm.textContent='Duct CLOSING (indomethacin / O2)'; nm.style.color='#ff5d6c';
+      body.innerHTML='<p class="kv"><b>Indomethacin / ibuprofen</b> block prostaglandin synthesis (like rising O2), so the duct constricts and shuts.</p><p class="kv" style="color:#ff9aa2">In a ductal-dependent-pulmonary lesion this removes the ONLY path to the lungs. Fatal. Correct use is closing a PDA in a preemie.</p>';
+      lung.textContent='Lung flow lost: severe cyanosis'; lung.style.color='#ff5d6c';
+    }
+  }
+  document.getElementById('pgeBtn').addEventListener('click',function(){setDuct(true);});
+  document.getElementById('indoBtn').addEventListener('click',function(){setDuct(false);});
+  function animDuct(){
+    ductCur+=(ductTgt-ductCur)*0.08;
+    ductCh.setAttribute('height',ductCur.toFixed(1));
+    ductCh.setAttribute('y',(75-ductCur/2).toFixed(1));
+    ductCh.setAttribute('fill',ductOpen?'#4aa3f6':'#5a2530');
+    if(ductOpen&&ductCur>10){
+      dt+=0.012; if(dt>=1)dt=0;
+      ductDot.style.display='block';
+      ductDot.setAttribute('cx',(90+ (172-90)*dt).toFixed(1));
+      ductDot.setAttribute('cy',75);
+    } else { ductDot.style.display='none'; }
+    requestAnimationFrame(animDuct);
+  }
+  setDuct(true); animDuct();
+})();
+</script>

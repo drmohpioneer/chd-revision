@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHD Revision — congenital heart disease</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { display: flex; flex-direction: column; font: 14px/1.4 -apple-system, "Segoe UI", Roboto, sans-serif; background: #0f1729; color: #e7ecf5; }
+  header { flex: 0 0 auto; background: #12233f; border-bottom: 2px solid #2b6cb0; box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+  .row1 { display: flex; align-items: center; gap: 12px; padding: 8px 14px; }
+  .brand { font-weight: 700; font-size: 15px; color: #7fb2f0; white-space: nowrap; }
+  .now { font-size: 13px; color: #b9c6dc; }
+  .count { margin-left: auto; font-size: 12px; color: #8ea3c2; white-space: nowrap; }
+  .nav { display: flex; gap: 6px; }
+  .nav button { background: #1c3253; color: #cfe0f7; border: 1px solid #35507c; border-radius: 7px; padding: 5px 11px; font-size: 13px; cursor: pointer; }
+  .nav button:hover { background: #244067; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 14px 9px; }
+  .tabs button { background: #182b49; color: #b9c6dc; border: 1px solid #2c466f; border-radius: 999px; padding: 5px 12px; font-size: 12.5px; cursor: pointer; transition: background .12s; }
+  .tabs button:hover { background: #21395d; color: #e7ecf5; }
+  .tabs button.active { background: #2b6cb0; border-color: #2b6cb0; color: #fff; font-weight: 600; }
+  main { flex: 1 1 auto; position: relative; background: #fff; }
+  iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  .spin { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#7fb2f0; font-size:13px; background:#0f1729; }
+  .hint { padding: 3px 14px 8px; font-size: 11px; color: #6f83a3; }
+  @media (max-width: 640px) {
+    .row1 { padding: 5px 10px; gap: 8px; }
+    .brand { font-size: 13px; }
+    .now { display: none; }
+    .count { font-size: 11px; }
+    .nav button { padding: 4px 9px; font-size: 12px; }
+    .tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 10px 6px; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs button { flex: 0 0 auto; }
+    .hint { padding: 2px 10px 6px; font-size: 10px; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .hint::-webkit-scrollbar { display: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="row1">
+    <span class="brand">CHD Revision</span>
+    <span class="now" id="now"></span>
+    <span class="count" id="count"></span>
+    <span class="nav">
+      <button id="prev" title="Previous (left arrow)">&larr; Prev</button>
+      <button id="next" title="Next (right arrow)">Next &rarr;</button>
+    </span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="hint">Tabs, Prev / Next, or the left / right arrow keys. Each lesson loads only when opened. More lessons (C3 to C7) are added as they are built.</div>
+</header>
+<main>
+  <iframe id="viewer" title="lesson" loading="lazy"></iframe>
+  <div class="spin" id="spin">Loading lesson…</div>
+</main>
+<script>
+const FILES = ["C1-circulation-cyanosis.html", "C2-cyanotic-decreased-flow.html"];
+const TABS = ["C1 \u00b7 Circulation", "C2 \u00b7 Cyanotic down-flow"];
+const TITLES = ["C1 \u2014 Circulation & cyanosis", "C2 \u2014 Cyanotic, decreased pulmonary flow"];
+const tabsEl = document.getElementById('tabs');
+const viewer = document.getElementById('viewer');
+const spin = document.getElementById('spin');
+const nowEl = document.getElementById('now');
+const countEl = document.getElementById('count');
+let cur = -1;
+
+TABS.forEach((t, i) => {
+  const b = document.createElement('button');
+  b.textContent = t;
+  b.addEventListener('click', () => show(i));
+  tabsEl.appendChild(b);
+});
+viewer.addEventListener('load', () => { spin.style.display = 'none'; });
+
+function show(i) {
+  if (i < 0 || i >= FILES.length || i === cur) return;
+  cur = i;
+  spin.style.display = 'flex';
+  viewer.src = FILES[i];
+  nowEl.textContent = TITLES[i];
+  countEl.textContent = (i + 1) + ' / ' + FILES.length;
+  [...tabsEl.children].forEach((b, j) => b.classList.toggle('active', j === i));
+  document.title = TITLES[i] + ' — CHD Revision';
+}
+
+document.getElementById('prev').addEventListener('click', () => show(cur - 1));
+document.getElementById('next').addEventListener('click', () => show(cur + 1));
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') show(cur - 1);
+  else if (e.key === 'ArrowRight') show(cur + 1);
+});
+
+show(0);
+</script>
+</body>
+</html>
