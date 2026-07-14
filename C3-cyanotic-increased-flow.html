@@ -1,0 +1,397 @@
+<meta charset="utf-8">
+<title>C3 - Cyanotic CHD with increased pulmonary flow</title>
+<style>
+  :root{--bg:#0e1220;--panel:#161c2e;--ink:#e8ecf5;--muted:#95a1bd;--accent:#7aa2ff;--pos:#38a169;--neg:#e53e3e;--iso:#718096;--warn:#e0a53e;--hi:#ff5d6c;--mix:#b57af6;--lo:#4aa3f6;--norm:#63d29b;--dec:#f6a54a;--inc:#4aa3f6}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .card{background:var(--panel);border:1px solid #232b45;border-radius:14px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .seg button{flex:1;min-width:150px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
+  .seg button:hover{border-color:var(--accent)}
+  .seg button.good.on{background:#1e4b32;border-color:var(--pos);color:#9be2b8}
+  .seg button.bad.on{background:#5a2530;border-color:var(--neg);color:#ff9aa2}
+  .rule{background:#1c2540;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .warnrule{background:#3a2f16;border-left:3px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .big{font-size:15px;font-weight:900;color:#fff}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .flowwrap{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+  @media(max-width:820px){.flowwrap{grid-template-columns:1fr}}
+  .box{fill:#0b1020;stroke:#2b3552;stroke-width:1.5}
+  .lbl{fill:#cdd6ea;font:600 12px sans-serif}
+  .lbl.sm{font:600 10.5px sans-serif;fill:#95a1bd}
+  .info{background:#0b1020;border-radius:10px;padding:14px;border-left:4px solid var(--accent)}
+  .info .name{font-size:18px;font-weight:900;margin:0 0 2px}
+  .info p{font-size:13.5px;margin:6px 0 0}
+  .grp{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px}
+  .grp.dec{border-top:4px solid var(--dec)}
+  .grp.inc{border-top:4px solid var(--inc)}
+  .grp h3{margin:0 0 6px;font-size:15px}
+  .grp .tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;margin-bottom:8px}
+  .grp ul{margin:8px 0 0;padding-left:18px;font-size:13.5px}
+  .grp li{margin:4px 0}
+  .foot{color:var(--muted);font-size:12px;margin-top:6px}
+  .kv{font-size:13.5px;margin:2px 0}
+  .dot{fill:#fff;stroke:#0e1220;stroke-width:1}
+  .stage{background:#0b1020;border-radius:10px;padding:16px;text-align:center}
+  .part{cursor:pointer;transition:.15s}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:700px){.cmp{grid-template-columns:1fr}}
+  .cmp .col{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px;text-align:center}
+  .cmp .col.tof{border-top:4px solid var(--dec)}
+  .cmp .col.tga{border-top:4px solid var(--inc)}
+  .cmp .col h3{margin:6px 0 4px;font-size:15px}
+  .satpill{display:inline-block;font-size:12px;font-weight:900;padding:3px 12px;border-radius:20px;margin-top:8px}
+</style>
+
+<div class="wrap">
+  <h1>C3 - Cyanotic CHD with INCREASED pulmonary blood flow</h1>
+  <p class="sub">The INCREASED-flow branch of C1 and the mirror image of C2. The road to the lungs is OPEN (so lung fields are plethoric / wet), but oxygenated and deoxygenated blood are not separated (transposition or complete mixing), so the baby is still blue. Anchors: Q5 all of these have increased flow EXCEPT D-TGA with VSD and severe pulmonary stenosis (the PS obstructs flow, dropping it into the decreased bucket); Q18 a cyanotic neonate with increased markings, loud S2, no murmur and side-by-side arteries (key says D, but the physiology fits a Taussig-Bing subpulmonic VSD with no PS = option a: confirm with the course).</p>
+
+  <!-- 1. INCREASED-FLOW PHYSIOLOGY -->
+  <div class="card">
+    <h2>1. The INCREASED-flow physiology: open road to the lungs, but the two bloods never separate (click to run the mixing)</h2>
+    <div class="flowwrap">
+      <div>
+        <svg id="physSvg" viewBox="0 0 380 300" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- plethoric (congested) lungs -->
+          <ellipse cx="60" cy="46" rx="30" ry="20" fill="#243a55" stroke="#4aa3f6" stroke-width="1.5"></ellipse>
+          <ellipse cx="60" cy="46" rx="18" ry="11" fill="#2f4d70"></ellipse>
+          <text x="60" y="50" text-anchor="middle" class="lbl sm" fill="#bcd4f0">plethoric</text>
+          <text x="60" y="84" text-anchor="middle" class="lbl sm" fill="#8ac6f6">lungs (wet, congested)</text>
+          <!-- ventricles -->
+          <rect x="70" y="150" width="90" height="110" rx="10" class="box"></rect>
+          <text x="115" y="245" text-anchor="middle" class="lbl">RV</text>
+          <rect x="160" y="150" width="90" height="110" rx="10" class="box"></rect>
+          <text x="205" y="245" text-anchor="middle" class="lbl">LV</text>
+          <!-- mixing point in septum -->
+          <rect id="physMix" x="152" y="180" width="16" height="34" rx="4" fill="#b57af6" opacity=".9"></rect>
+          <text x="160" y="172" text-anchor="middle" class="lbl sm" fill="#c9a6ff">mixing</text>
+          <!-- pulmonary artery (OPEN, wide) -->
+          <path d="M110,150 L110,66" class="box" fill="none" stroke-width="6" stroke="#3a5f86"></path>
+          <text x="130" y="120" text-anchor="middle" class="lbl sm" fill="#8ac6f6">open</text>
+          <!-- aorta -->
+          <path d="M200,150 L200,40 C200,26 230,26 230,40 L230,110" class="box" fill="none" stroke-width="2"></path>
+          <text x="248" y="60" text-anchor="middle" class="lbl sm">Aorta</text>
+          <!-- mixed blood dot -->
+          <circle id="physDot" class="dot" r="6" cx="115" cy="205" fill="#b57af6"></circle>
+        </svg>
+        <p class="foot">Flow to the lungs is OPEN (wide pulmonary artery, plethoric lungs), but red and blue are not separated, so blood <b style="color:#b57af6">mixes</b> and the aorta carries desaturated blood. Hand-drawn, nothing embedded.</p>
+      </div>
+      <div class="info">
+        <p class="name">Blue baby, WET lungs</p>
+        <p class="kv"><b>Chain:</b> road to the lungs is OPEN (plethoric lungs) but the circulation fails to separate red from blue (transposed or completely mixed) to the aorta carries desaturated blood to <b>cyanosis + increased (plethoric) lung fields</b>.</p>
+        <p class="kv" style="color:#95a1bd">The switch: add significant <b>pulmonary stenosis</b> and the road to the lungs is now obstructed, so the flow becomes DECREASED (dark lungs). That flip is the whole of Q5.</p>
+        <div class="grp inc" style="margin-top:10px">
+          <span class="tag" style="background:#12283a;color:#8ac6f6">INCREASED (plethoric, wet) = C3 lesions (the 5 Ts + DORV)</span>
+          <ul>
+            <li>Transposition (D-TGA), the anchor</li>
+            <li>TAPVR (obstructed infracardiac = emergency)</li>
+            <li>Truncus arteriosus (22q11 / DiGeorge)</li>
+            <li>Tricuspid atresia with big VSD, no PS</li>
+            <li>Single ventricle (complete mixing)</li>
+            <li>DORV (chameleon: VSD position + PS decide)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="warnrule big">Q5: all of these are INCREASED-flow EXCEPT <b>D-TGA with VSD and severe pulmonary stenosis</b>. The severe PS obstructs the road to the lungs, so that lesion has DECREASED flow (it behaves like the C2 / dark-lung group). PS is the switch that flips the bucket.</div>
+  </div>
+
+  <!-- 2. INTERACTIVE D-TGA -->
+  <div class="card">
+    <h2>2. D-transposition: two parallel circuits that survive only by mixing (click a mixing point to rescue the baby)</h2>
+    <div class="seg">
+      <button data-mix="none" class="on">No mixing (two parallel loops)</button>
+      <button data-mix="asd">ASD (atrial mixing / Rashkind)</button>
+      <button data-mix="vsd">VSD (ventricular mixing)</button>
+      <button data-mix="pda">PDA (ductal mixing / PGE1)</button>
+    </div>
+    <div class="flowwrap">
+      <div>
+        <svg id="tgaSvg" viewBox="0 0 400 320" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- lungs -->
+          <ellipse cx="70" cy="46" rx="34" ry="20" fill="#243a55" stroke="#4aa3f6" stroke-width="1.5"></ellipse>
+          <text x="70" y="50" text-anchor="middle" class="lbl sm" fill="#bcd4f0">lungs</text>
+          <!-- body -->
+          <rect x="300" y="26" width="70" height="40" rx="8" fill="#3a2530" stroke="#c95d6c" stroke-width="1.5"></rect>
+          <text x="335" y="50" text-anchor="middle" class="lbl sm" fill="#ffb3bd">body</text>
+          <!-- RA + RV (systemic/blue loop) -->
+          <rect x="120" y="120" width="80" height="30" rx="6" class="box"></rect>
+          <text x="160" y="140" text-anchor="middle" class="lbl sm">RA</text>
+          <path d="M120,155 L200,155 L200,290 L120,290 Z" class="box"></path>
+          <text x="160" y="275" text-anchor="middle" class="lbl">RV</text>
+          <!-- LA + LV (pulmonary/red loop) -->
+          <rect x="200" y="120" width="80" height="30" rx="6" class="box"></rect>
+          <text x="240" y="140" text-anchor="middle" class="lbl sm">LA</text>
+          <path d="M200,155 L280,155 L280,290 L200,290 Z" class="box"></path>
+          <text x="240" y="275" text-anchor="middle" class="lbl">LV</text>
+          <!-- AORTA off the RV (WRONG) -> to body -->
+          <path d="M150,155 L150,70 C150,40 300,40 300,46" fill="none" stroke="#c95d6c" stroke-width="9" stroke-linecap="round" opacity=".9"></path>
+          <text x="150" y="90" text-anchor="middle" class="lbl sm" fill="#ffb3bd">Aorta (off RV)</text>
+          <!-- PA off the LV (WRONG) -> to lungs -->
+          <path d="M250,155 L250,80 C250,52 100,52 82,60" fill="none" stroke="#4aa3f6" stroke-width="9" stroke-linecap="round" opacity=".9"></path>
+          <text x="250" y="100" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA (off LV)</text>
+          <!-- mixing sites (highlightable) -->
+          <rect id="mAsd" x="192" y="126" width="16" height="18" rx="3" fill="#2b3552" stroke="#2b3552"></rect>
+          <rect id="mVsd" x="192" y="185" width="16" height="40" rx="4" fill="#2b3552" stroke="#2b3552"></rect>
+          <path id="mPda" d="M180,66 C210,58 220,58 250,66" fill="none" stroke="#2b3552" stroke-width="8" stroke-linecap="round"></path>
+          <text x="215" y="52" text-anchor="middle" class="lbl sm" fill="#6f7c99">duct</text>
+          <!-- mixing dot -->
+          <circle id="tgaDot" class="dot" r="6" cx="160" cy="230" fill="#4aa3f6" opacity="0"></circle>
+        </svg>
+        <p class="foot">Aorta off the RIGHT ventricle, PA off the LEFT: the blue loop (body to RV to aorta to body) and the red loop (lungs to LV to PA to lungs) never meet. Only a MIXING point lets oxygen reach the body.</p>
+      </div>
+      <div class="info" id="tgaInfo">
+        <p class="name" id="tgaName">Two parallel circuits</p>
+        <div id="tgaBody"></div>
+        <div style="text-align:center"><span class="satpill" id="tgaSat" style="background:#3a2540;color:#e0a6c0">baby: deep blue (no mixing)</span></div>
+      </div>
+    </div>
+    <div class="warnrule big">Test signature: <b>egg on a string</b> (narrow mediastinum, great arteries front-to-back) + increased flow + loud single S2, no murmur. Rescue = MIXING: <b>PGE1</b> keeps the duct open and the <b>Rashkind balloon atrial septostomy</b> tears the atrial septum; the <b>arterial switch</b> is the definitive repair. Here the duct is kept open for MIXING, not for pulmonary flow.</div>
+  </div>
+
+  <!-- 3. TAPVR -->
+  <div class="card">
+    <h2>3. TAPVR: the pulmonary veins drain the WRONG way (toggle the two forms)</h2>
+    <div class="seg" style="max-width:640px">
+      <button id="tapSupra" class="on">Supracardiac (snowman, not obstructed)</button>
+      <button id="tapInfra" class="bad">Infracardiac (below diaphragm, OBSTRUCTED)</button>
+    </div>
+    <div class="grid">
+      <div class="stage">
+        <svg id="tapSvg" viewBox="0 0 300 300" style="width:100%;height:auto;max-width:300px">
+          <!-- thorax -->
+          <rect x="20" y="20" width="260" height="260" rx="18" fill="#12161f" stroke="#2b3552" stroke-width="1.5"></rect>
+          <!-- diaphragm line -->
+          <line x1="24" y1="232" x2="276" y2="232" stroke="#3a4667" stroke-dasharray="5 4"></line>
+          <text x="250" y="246" text-anchor="middle" class="lbl sm" fill="#6f7c99">diaphragm</text>
+          <!-- lungs -->
+          <ellipse id="tapLungL" cx="78" cy="120" rx="40" ry="66" fill="#1a2436" stroke="#2b3552"></ellipse>
+          <ellipse id="tapLungR" cx="222" cy="120" rx="40" ry="66" fill="#1a2436" stroke="#2b3552"></ellipse>
+          <!-- heart body -->
+          <ellipse cx="150" cy="150" rx="52" ry="46" fill="#243049" stroke="#7aa2ff" stroke-width="2"></ellipse>
+          <text x="150" y="155" text-anchor="middle" class="lbl sm">heart</text>
+          <!-- obligatory ASD marker -->
+          <rect x="143" y="130" width="14" height="16" rx="3" fill="#b57af6"></rect>
+          <text x="150" y="120" text-anchor="middle" class="lbl sm" fill="#c9a6ff">ASD (obligatory)</text>
+          <!-- pulmonary veins draining the wrong way (converging vertical vein) -->
+          <path d="M110,110 C130,96 150,96 150,86" fill="none" stroke="#e05a5a" stroke-width="3"></path>
+          <path d="M190,110 C170,96 150,96 150,86" fill="none" stroke="#e05a5a" stroke-width="3"></path>
+          <!-- vertical / draining vein: swaps up (supra) vs down (infra) -->
+          <path id="tapVein" d="M150,86 L150,44" fill="none" stroke="#e05a5a" stroke-width="5"></path>
+          <!-- snowman head (supra) -->
+          <ellipse id="tapHead" cx="150" cy="52" rx="46" ry="24" fill="none" stroke="#e0a53e" stroke-width="2" stroke-dasharray="4 3"></ellipse>
+          <text id="tapHeadTxt" x="150" y="40" text-anchor="middle" class="lbl sm" fill="#e0c07a">snowman head</text>
+          <!-- obstruction marker (infra only) -->
+          <rect id="tapObs" x="142" y="244" width="16" height="12" rx="3" fill="#e53e3e" opacity="0"></rect>
+        </svg>
+      </div>
+      <div>
+        <p class="name" id="tapName" style="font-size:17px;font-weight:900;margin:0 0 6px">Supracardiac TAPVR</p>
+        <div id="tapBody">
+          <p class="kv"><b>The pulmonary veins do not reach the LA.</b> They drain the oxygenated lung blood the WRONG way into the systemic veins, so everything mixes in the right atrium. An <b style="color:#c9a6ff">ASD is obligatory</b>: it is the only way blood reaches the left heart and the body.</p>
+          <p class="kv" style="color:#8ac6f6"><b>Supracardiac / not obstructed:</b> the dilated vertical vein + SVC form the classic <b>snowman (figure-of-8)</b> heart on CXR. Increased flow, cyanosis, not an immediate emergency.</p>
+        </div>
+      </div>
+    </div>
+    <div class="warnrule big">The trap: <b>infracardiac (below-diaphragm) TAPVR is usually OBSTRUCTED</b> (the descending vein is squeezed at the diaphragm), so it is a <b>neonatal emergency with pulmonary oedema</b>, a wet chest X-ray that mimics lung disease. <b>PGE1 does NOT help</b> (the block is in the veins, not the duct): it needs emergency surgery.</div>
+  </div>
+
+  <!-- 4. DORV -->
+  <div class="card">
+    <h2>4. DORV: the VSD position decides the physiology (subaortic = TOF-like, subpulmonic Taussig-Bing = TGA-like)</h2>
+    <div class="cmp">
+      <div class="col tof">
+        <svg viewBox="0 0 160 150" style="width:150px;height:140px">
+          <!-- RV giving off both arteries -->
+          <rect x="40" y="80" width="80" height="56" rx="8" class="box"></rect>
+          <text x="80" y="120" text-anchor="middle" class="lbl">RV</text>
+          <!-- both arteries off RV -->
+          <path d="M60,80 L60,26" fill="none" stroke="#c95d6c" stroke-width="7"></path>
+          <text x="52" y="20" text-anchor="middle" class="lbl sm" fill="#ffb3bd">Ao</text>
+          <path d="M100,80 L100,26" fill="none" stroke="#4aa3f6" stroke-width="7"></path>
+          <text x="108" y="20" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA</text>
+          <!-- VSD under the aorta -->
+          <rect x="52" y="86" width="16" height="14" rx="3" fill="#b57af6"></rect>
+          <text x="60" y="112" text-anchor="middle" class="lbl sm" fill="#c9a6ff">VSD</text>
+        </svg>
+        <h3 style="color:#f6c98a">Subaortic VSD</h3>
+        <p class="kv"><b>Behaves like a VSD / TOF.</b> LV blood streams to the aorta. Add PS and it is exactly TOF (cyanotic, DECREASED flow, dark lungs).</p>
+        <span class="satpill" style="background:#3a2a12;color:#f6c98a">VSD / TOF-like</span>
+      </div>
+      <div class="col tga">
+        <svg viewBox="0 0 160 150" style="width:150px;height:140px">
+          <rect x="40" y="80" width="80" height="56" rx="8" class="box"></rect>
+          <text x="80" y="120" text-anchor="middle" class="lbl">RV</text>
+          <path d="M60,80 L60,26" fill="none" stroke="#c95d6c" stroke-width="7"></path>
+          <text x="52" y="20" text-anchor="middle" class="lbl sm" fill="#ffb3bd">Ao</text>
+          <path d="M100,80 L100,26" fill="none" stroke="#4aa3f6" stroke-width="7"></path>
+          <text x="108" y="20" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA</text>
+          <!-- VSD under the pulmonary artery -->
+          <rect x="92" y="86" width="16" height="14" rx="3" fill="#b57af6"></rect>
+          <text x="100" y="112" text-anchor="middle" class="lbl sm" fill="#c9a6ff">VSD</text>
+        </svg>
+        <h3 style="color:#8ac6f6">Subpulmonic VSD (Taussig-Bing)</h3>
+        <p class="kv"><b>Behaves like transposition (TGA-like).</b> LV blood streams to the PA; the systemic (blue) RV blood goes to the aorta, so the baby is cyanotic with INCREASED flow. Great arteries often <b>side by side</b>.</p>
+        <span class="satpill" style="background:#12283a;color:#8ac6f6">TGA-like (increased flow)</span>
+      </div>
+    </div>
+    <div class="rule"><b>The PS switch again:</b> in DORV, pulmonary stenosis DECREASES pulmonary flow. So "subaortic VSD + PS" behaves like TOF (dark lungs) and "subpulmonic VSD, no PS" (Taussig-Bing) behaves like TGA (plethoric lungs). Match the lung fields to the PS.</div>
+    <div class="warnrule big">Q18 (key = D, DORV subaortic VSD + PS). ⚠ CONFLICT with the stem: increased markings mean flow is HIGH, so NO significant PS; side-by-side arteries + loud S2 + no murmur = a <b>subpulmonic VSD (Taussig-Bing), no PS = option a</b> (TGA-like). Option D's PS would make the markings DECREASED, contradicting the stem. Teach the physiology and <b>confirm the intended answer with the course</b>. Do not just assert D.</div>
+  </div>
+
+  <!-- 5. TRUNCUS + 22q11 -->
+  <div class="card">
+    <h2>5. Truncus arteriosus: one common trunk over a VSD, plus 22q11 (DiGeorge)</h2>
+    <div class="grid">
+      <div class="stage">
+        <svg viewBox="0 0 300 240" style="width:100%;height:auto;max-width:300px">
+          <!-- ventricles -->
+          <rect x="70" y="130" width="70" height="90" rx="8" class="box"></rect>
+          <text x="105" y="200" text-anchor="middle" class="lbl">RV</text>
+          <rect x="140" y="130" width="70" height="90" rx="8" class="box"></rect>
+          <text x="175" y="200" text-anchor="middle" class="lbl">LV</text>
+          <!-- VSD -->
+          <rect x="132" y="150" width="16" height="34" rx="4" fill="#b57af6"></rect>
+          <text x="140" y="142" text-anchor="middle" class="lbl sm" fill="#c9a6ff">VSD</text>
+          <!-- single common trunk overriding the VSD -->
+          <path d="M118,130 C118,70 162,70 162,130" fill="none" stroke="#a06fb0" stroke-width="16" stroke-linecap="round" opacity=".9"></path>
+          <text x="140" y="60" text-anchor="middle" class="lbl sm" fill="#c9a6ff">single common trunk</text>
+          <!-- trunk gives off aorta + PA + coronary -->
+          <path d="M128,74 L96,40" fill="none" stroke="#c95d6c" stroke-width="5"></path>
+          <text x="80" y="34" text-anchor="middle" class="lbl sm" fill="#ffb3bd">aorta</text>
+          <path d="M152,74 L200,44" fill="none" stroke="#4aa3f6" stroke-width="5"></path>
+          <text x="216" y="42" text-anchor="middle" class="lbl sm" fill="#8ac6f6">pulmonaries</text>
+          <circle cx="140" cy="86" r="4" fill="#f6c98a"></circle>
+          <text x="140" y="104" text-anchor="middle" class="lbl sm" fill="#f6c98a">+ coronaries</text>
+        </svg>
+      </div>
+      <div>
+        <p class="kv"><b>One vessel does everything.</b> The embryonic trunk never divides, so a single common arterial trunk overrides a VSD and gives off the aorta, the pulmonaries and the coronaries through one (often abnormal) truncal valve.</p>
+        <p class="kv"><b>Both ventricles empty into it</b>, so systemic and pulmonary blood <b>fully mix</b>: cyanosis + increased flow + early pulmonary over-circulation and heart failure.</p>
+        <div class="grp inc" style="margin-top:10px;border-top:4px solid #e0a53e">
+          <span class="tag" style="background:#3a2f16;color:#e0c07a">22q11.2 deletion (DiGeorge)</span>
+          <ul>
+            <li>Conotruncal defects: <b>truncus</b> + interrupted aortic arch</li>
+            <li><b>Hypocalcaemia</b> (absent parathyroids)</li>
+            <li><b>Absent / hypoplastic thymus</b> (immune deficiency)</li>
+            <li>Characteristic facies</li>
+          </ul>
+        </div>
+        <div class="rule" style="margin-top:10px">In Q5, <b>truncus arteriosus type 1</b> is a genuine increased-flow / mixing lesion, so it is a distractor, NOT the exception. The exception is D-TGA + severe PS.</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">C3 visual - Module 5 CHD. All diagrams hand-drawn inline SVG, fully self-contained, no external assets.</p>
+</div>
+
+<script>
+(function(){
+  // ---------- 1. Physiology mixing dot ----------
+  var pDot=document.getElementById('physDot');
+  var pPts=[[115,250],[115,200],[160,197],[205,200],[205,60]]; // up RV -> across mixing -> LV -> up aorta
+  var pt=0;
+  function animPhys(){
+    var n=pPts.length-1;
+    pt+=0.005; if(pt>=1)pt=0;
+    var seg=Math.min(Math.floor(pt*n),n-1), f=pt*n-seg;
+    var a=pPts[seg], b=pPts[seg+1];
+    pDot.setAttribute('cx',a[0]+(b[0]-a[0])*f);
+    pDot.setAttribute('cy',a[1]+(b[1]-a[1])*f);
+    requestAnimationFrame(animPhys);
+  }
+  animPhys();
+
+  // ---------- 2. Interactive D-TGA mixing ----------
+  var mix={
+    none:{name:'No mixing: two parallel circuits',
+      body:'<p><b>Aorta off the RV, PA off the LV.</b> The blue loop (body to RV to aorta to body) and the red loop (lungs to LV to PA to lungs) run in <b>parallel and never meet</b>. Oxygen never reaches the body. Incompatible with life as it stands.</p>',
+      sat:'baby: deep blue (no mixing)',satc:'#3a2540;color:#e0a6c0',dot:null,run:false},
+    asd:{name:'ASD (atrial mixing) = the Rashkind target',
+      body:'<p><b>The most reliable mixing site.</b> Oxygenated blood crosses at the atrial level from LA to RA into the systemic loop. This is why the atrial septum is deliberately torn open in the <b>Rashkind balloon atrial septostomy</b>. The baby pinks up.</p>',
+      sat:'baby: pinker (atrial mixing)',satc:'#1e4b32;color:#9be2b8',el:'mAsd',
+      pts:[[240,135],[200,135],[160,135],[160,230]],dot:'#63d29b',run:true},
+    vsd:{name:'VSD (ventricular mixing)',
+      body:'<p><b>Mixing at the ventricular level.</b> A large VSD improves saturation, but it also over-circulates the lungs (heart failure). Useful mixing, at the cost of pulmonary plethora.</p>',
+      sat:'baby: pinker (ventricular mixing)',satc:'#1e4b32;color:#9be2b8',el:'mVsd',
+      pts:[[240,205],[200,205],[160,205],[150,90]],dot:'#63d29b',run:true},
+    pda:{name:'PDA (ductal mixing) = the PGE1 target',
+      body:'<p><b>The duct lets blood cross between the aorta and pulmonary artery.</b> Keeping it open with <b>PGE1</b> buys time and improves mixing, especially with an intact ventricular septum, until the Rashkind / arterial switch.</p>',
+      sat:'baby: pinker (ductal mixing)',satc:'#1e4b32;color:#9be2b8',el:'mPda',
+      pts:[[180,64],[215,60],[250,64],[250,150]],dot:'#63d29b',run:true}
+  };
+  var tgaDot=document.getElementById('tgaDot');
+  var tgaRun=false,tgaPts=[],tgaT=0;
+  function resetMix(){
+    document.getElementById('mAsd').setAttribute('fill','#2b3552');
+    document.getElementById('mVsd').setAttribute('fill','#2b3552');
+    document.getElementById('mPda').setAttribute('stroke','#2b3552');
+    tgaDot.setAttribute('opacity','0');
+  }
+  function selMix(k){
+    document.querySelectorAll('[data-mix]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-mix')===k);});
+    resetMix();
+    var s=mix[k];
+    if(s.el){
+      var e=document.getElementById(s.el);
+      if(k==='pda')e.setAttribute('stroke','#63d29b'); else e.setAttribute('fill','#63d29b');
+    }
+    document.getElementById('tgaName').textContent=s.name;
+    document.getElementById('tgaBody').innerHTML=s.body;
+    var pill=document.getElementById('tgaSat');
+    pill.textContent=s.sat; pill.style.cssText='background:'+s.satc;
+    if(s.run){ tgaPts=s.pts; tgaT=0; tgaRun=true; tgaDot.setAttribute('fill',s.dot); tgaDot.setAttribute('opacity','1'); }
+    else { tgaRun=false; }
+  }
+  document.querySelectorAll('[data-mix]').forEach(function(b){b.addEventListener('click',function(){selMix(b.getAttribute('data-mix'));});});
+  [['mAsd','asd'],['mVsd','vsd'],['mPda','pda']].forEach(function(pair){
+    var e=document.getElementById(pair[0]); if(e)e.addEventListener('click',function(){selMix(pair[1]);});
+  });
+  function animTga(){
+    if(tgaRun && tgaPts.length>1){
+      var n=tgaPts.length-1;
+      tgaT+=0.006; if(tgaT>=1)tgaT=0;
+      var seg=Math.min(Math.floor(tgaT*n),n-1), f=tgaT*n-seg;
+      var a=tgaPts[seg], b=tgaPts[seg+1];
+      tgaDot.setAttribute('cx',a[0]+(b[0]-a[0])*f);
+      tgaDot.setAttribute('cy',a[1]+(b[1]-a[1])*f);
+    }
+    requestAnimationFrame(animTga);
+  }
+  animTga();
+  selMix('none');
+
+  // ---------- 3. TAPVR supra / infra toggle ----------
+  var vein=document.getElementById('tapVein'), head=document.getElementById('tapHead'),
+      headTxt=document.getElementById('tapHeadTxt'), obs=document.getElementById('tapObs'),
+      lungL=document.getElementById('tapLungL'), lungR=document.getElementById('tapLungR');
+  function tapSupra(){
+    document.getElementById('tapSupra').classList.add('on');
+    document.getElementById('tapInfra').classList.remove('on');
+    vein.setAttribute('d','M150,86 L150,44'); vein.setAttribute('stroke','#e05a5a');
+    head.setAttribute('opacity','1'); headTxt.setAttribute('opacity','1'); obs.setAttribute('opacity','0');
+    lungL.setAttribute('fill','#1a2436'); lungR.setAttribute('fill','#1a2436');
+    document.getElementById('tapName').textContent='Supracardiac TAPVR (snowman)';
+    document.getElementById('tapBody').innerHTML='<p class="kv"><b>The pulmonary veins do not reach the LA.</b> They drain the oxygenated lung blood the WRONG way into the systemic veins, so everything mixes in the right atrium. An <b style="color:#c9a6ff">ASD is obligatory</b>: it is the only way blood reaches the left heart and the body.</p><p class="kv" style="color:#8ac6f6"><b>Supracardiac / not obstructed:</b> the dilated vertical vein + SVC form the classic <b>snowman (figure-of-8)</b> heart on CXR. Increased flow, cyanosis, not an immediate emergency.</p>';
+  }
+  function tapInfra(){
+    document.getElementById('tapInfra').classList.add('on');
+    document.getElementById('tapSupra').classList.remove('on');
+    vein.setAttribute('d','M150,86 L150,250'); vein.setAttribute('stroke','#e05a5a');
+    head.setAttribute('opacity','0'); headTxt.setAttribute('opacity','0'); obs.setAttribute('opacity','1');
+    lungL.setAttribute('fill','#3a2f2f'); lungR.setAttribute('fill','#3a2f2f');
+    document.getElementById('tapName').textContent='Infracardiac TAPVR (OBSTRUCTED emergency)';
+    document.getElementById('tapBody').innerHTML='<p class="kv"><b>The draining vein runs DOWN through the diaphragm</b> (to the portal / hepatic veins) and is <b style="color:#ff9aa2">usually OBSTRUCTED</b> as it is squeezed passing the diaphragm. Blood dams back into the lungs.</p><p class="kv" style="color:#ff9aa2"><b>Neonatal EMERGENCY:</b> severe cyanosis + pulmonary oedema, a wet / congested chest X-ray that mimics lung disease. <b>PGE1 does NOT help</b> (the block is in the veins). Needs emergency surgery.</p>';
+  }
+  document.getElementById('tapSupra').addEventListener('click',tapSupra);
+  document.getElementById('tapInfra').addEventListener('click',tapInfra);
+  tapSupra();
+})();
+</script>
