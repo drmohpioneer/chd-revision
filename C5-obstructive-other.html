@@ -54,95 +54,98 @@
 
   <!-- 1. COARCTATION -->
   <div class="card">
-    <h2>1. Coarctation of the aorta: a dam past the left subclavian, high pressure ABOVE and weak femorals BELOW (toggle the two settings)</h2>
+    <h2>1. Coarctation of the aorta: a narrowing at the isthmus, next to the duct - toggle preductal vs postductal</h2>
     <div class="seg" style="max-width:680px">
-      <button id="coaOld" class="on">Older child / adult (collaterals + rib notching)</button>
-      <button id="coaNeo">Critical neonate (duct-dependent to PGE1)</button>
+      <button id="coaPost" class="on">Postductal (adult): pinch BELOW the duct</button>
+      <button id="coaPre">Preductal (infantile): pinch ABOVE the duct</button>
     </div>
     <div class="flowwrap">
       <div>
-        <svg id="coaSvg" viewBox="0 0 420 360" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
-          <!-- head + neck (upper body, HIGH pressure) -->
-          <circle cx="185" cy="28" r="17" fill="#3a2530" stroke="#c95d6c" stroke-width="1.5"></circle>
-          <text x="185" y="32" text-anchor="middle" class="lbl sm" fill="#ffb3bd">head</text>
-          <!-- patient's right arm = screen-LEFT -->
-          <rect x="44" y="18" width="46" height="26" rx="6" fill="#3a2530" stroke="#c95d6c" stroke-width="1.3"></rect>
-          <text x="67" y="35" text-anchor="middle" class="lbl sm" fill="#ffb3bd">arm</text>
-          <!-- patient's left arm = screen-RIGHT -->
-          <rect x="340" y="18" width="46" height="26" rx="6" fill="#3a2530" stroke="#c95d6c" stroke-width="1.3"></rect>
-          <text x="363" y="35" text-anchor="middle" class="lbl sm" fill="#ffb3bd">arm</text>
-          <text x="185" y="62" text-anchor="middle" class="lbl sm" fill="#ff9aa2">upper body: HIGH pressure, bounding</text>
+        <svg id="coaSvg" viewBox="0 0 460 400" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- head (centre) + arms: patient's RIGHT arm = screen-LEFT, patient's LEFT arm = screen-RIGHT -->
+          <circle cx="210" cy="40" r="17" fill="#3a2530" stroke="#c95d6c" stroke-width="1.5"></circle>
+          <text x="210" y="44" text-anchor="middle" class="lbl sm" fill="#ffb3bd">head</text>
+          <rect x="44" y="28" width="46" height="26" rx="6" fill="#3a2530" stroke="#c95d6c" stroke-width="1.3"></rect>
+          <text x="67" y="45" text-anchor="middle" class="lbl sm" fill="#ffb3bd">arm</text>
+          <rect x="372" y="28" width="46" height="26" rx="6" fill="#3a2530" stroke="#c95d6c" stroke-width="1.3"></rect>
+          <text x="395" y="45" text-anchor="middle" class="lbl sm" fill="#ffb3bd">arm</text>
 
           <!-- ATRIA -->
-          <rect x="160" y="176" width="58" height="32" rx="6" class="box"></rect>
-          <text x="189" y="196" text-anchor="middle" class="lbl sm">RA</text>
-          <rect x="218" y="176" width="58" height="32" rx="6" class="box"></rect>
-          <text x="247" y="196" text-anchor="middle" class="lbl sm">LA</text>
+          <rect x="150" y="214" width="52" height="34" rx="6" class="box"></rect>
+          <text x="176" y="236" text-anchor="middle" class="lbl sm">RA</text>
+          <rect x="204" y="214" width="52" height="34" rx="6" class="box"></rect>
+          <text x="230" y="236" text-anchor="middle" class="lbl sm">LA</text>
           <!-- VENTRICLES -->
-          <rect x="160" y="208" width="58" height="76" rx="8" class="box"></rect>
-          <text x="189" y="272" text-anchor="middle" class="lbl">RV</text>
-          <rect x="218" y="208" width="58" height="76" rx="8" class="box"></rect>
-          <text x="247" y="272" text-anchor="middle" class="lbl">LV</text>
+          <rect x="150" y="248" width="52" height="74" rx="8" class="box"></rect>
+          <text x="176" y="290" text-anchor="middle" class="lbl">RV</text>
+          <rect x="204" y="248" width="52" height="74" rx="8" class="box"></rect>
+          <text x="230" y="290" text-anchor="middle" class="lbl">LV</text>
           <!-- SVC / IVC into the RA (screen-left) -->
-          <path d="M150,150 L150,178 L160,182" fill="none" stroke="#4a6f9a" stroke-width="4"></path>
-          <text x="132" y="150" text-anchor="middle" class="lbl sm" fill="#7fa8d6">SVC</text>
-          <path d="M150,320 L150,282 L160,278" fill="none" stroke="#4a6f9a" stroke-width="4"></path>
-          <text x="134" y="332" text-anchor="middle" class="lbl sm" fill="#7fa8d6">IVC</text>
+          <path d="M130,152 L130,220 L150,224" fill="none" stroke="#4a6f9a" stroke-width="4"></path>
+          <text x="116" y="160" text-anchor="middle" class="lbl sm" fill="#7fa8d6">SVC</text>
+          <path d="M130,356 L130,248 L150,246" fill="none" stroke="#4a6f9a" stroke-width="4"></path>
+          <text x="116" y="348" text-anchor="middle" class="lbl sm" fill="#7fa8d6">IVC</text>
 
-          <!-- ASCENDING AORTA off the LV, up on screen-right; ARCH over the top; DESCENDING on screen-right (patient's LEFT) -->
-          <path d="M250,208 L250,112 C250,82 312,78 320,112" fill="none" stroke="#c95d6c" stroke-width="9" stroke-linecap="round"></path>
-          <!-- arch branches: to head (centre) and to the patient's right arm (screen-left) -->
-          <path d="M258,88 C230,60 208,52 185,46" fill="none" stroke="#c95d6c" stroke-width="4"></path>
-          <path d="M248,94 C200,58 120,50 67,44" fill="none" stroke="#c95d6c" stroke-width="4"></path>
-          <!-- left subclavian to the patient's left arm (screen-right) -->
-          <path d="M306,86 C328,66 348,54 363,46" fill="none" stroke="#c95d6c" stroke-width="4"></path>
-          <text x="312" y="102" text-anchor="start" class="lbl sm" fill="#ffb3bd">L subclavian</text>
-          <!-- COARCTATION pinch just distal to the left subclavian, on the descending aorta -->
-          <path d="M310,116 L320,124 L330,116" fill="none" stroke="#e53e3e" stroke-width="2.5"></path>
-          <path d="M310,132 L320,124 L330,132" fill="none" stroke="#e53e3e" stroke-width="2.5"></path>
-          <text x="304" y="126" text-anchor="end" class="lbl sm" fill="#ff9aa2">coarctation</text>
-          <!-- DESCENDING AORTA down screen-right to lower body -->
-          <path d="M320,124 L320,318" fill="none" stroke="#c95d6c" stroke-width="7" stroke-linecap="round"></path>
-          <!-- lower body / legs (weak) -->
-          <rect x="288" y="322" width="64" height="26" rx="6" fill="#22303f" stroke="#4a6f9a" stroke-width="1.3"></rect>
-          <text x="320" y="339" text-anchor="middle" class="lbl sm" fill="#7fa8d6">legs: weak femorals</text>
+          <!-- ASCENDING AORTA off the LV (root swings right to clear the atria), ARCH over the top, DESCENDING on screen-right (patient's LEFT) -->
+          <path d="M242,248 C248,232 274,234 278,206 L278,150 C278,114 322,110 336,150" fill="none" stroke="#c95d6c" stroke-width="9" stroke-linecap="round"></path>
+          <!-- descending aorta -->
+          <path d="M336,150 L336,356" fill="none" stroke="#c95d6c" stroke-width="7" stroke-linecap="round"></path>
+          <!-- 3 arch branches in order: brachiocephalic (screen-left), L common carotid (head), L subclavian (screen-right) -->
+          <path d="M288,124 C264,90 150,66 67,52" fill="none" stroke="#c95d6c" stroke-width="4"></path>
+          <path d="M302,116 C290,84 244,64 210,58" fill="none" stroke="#c95d6c" stroke-width="4"></path>
+          <path d="M322,124 C338,90 362,68 395,52" fill="none" stroke="#c95d6c" stroke-width="4"></path>
+          <text x="326" y="112" text-anchor="start" class="lbl sm" fill="#ffb3bd">L subclavian</text>
 
-          <!-- COLLATERALS (older-child mode) -->
+          <!-- PULMONARY TRUNK off the RV + LEFT PA reaching toward the isthmus (so the duct has something to join) -->
+          <path d="M186,248 C196,218 206,194 216,182 C252,174 300,174 322,178" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
+          <text x="228" y="200" text-anchor="middle" class="lbl sm" fill="#8ac6f6">left PA</text>
+          <!-- DUCTUS: connects the (left) PA to the descending aorta, just distal to the L subclavian -->
+          <path id="coaDuctVessel" class="pulseC" d="M322,176 C328,170 332,166 336,162" fill="none" stroke="#63d29b" stroke-width="6" stroke-linecap="round"></path>
+          <text id="coaDuctLbl" x="342" y="176" text-anchor="start" class="lbl sm" fill="#9be2b8">ductus</text>
+
+          <!-- COARCTATION pinch (position set by the toggle: below the duct = postductal, above = preductal) -->
+          <g id="coaPinch" transform="translate(336,182)">
+            <path d="M-13,-7 L0,0 L13,-7" fill="none" stroke="#e53e3e" stroke-width="2.5"></path>
+            <path d="M-13,7 L0,0 L13,7" fill="none" stroke="#e53e3e" stroke-width="2.5"></path>
+          </g>
+          <text id="coaCoarctLbl" x="354" y="192" text-anchor="start" class="lbl sm" fill="#ff9aa2">coarctation</text>
+
+          <!-- COLLATERALS + rib notching (postductal mode) -->
           <g id="coaCollat">
-            <path class="pulseC" d="M310,100 C362,140 362,224 322,252" fill="none" stroke="#e0a53e" stroke-width="2.5" stroke-dasharray="5 4"></path>
-            <path class="pulseC" d="M300,116 C346,150 346,214 320,244" fill="none" stroke="#e0a53e" stroke-width="2" stroke-dasharray="5 4"></path>
-            <!-- rib ticks (screen-right) -->
-            <path d="M340,150 h14 M344,172 h14 M344,194 h14 M340,216 h14" stroke="#e0c07a" stroke-width="2"></path>
-            <text x="360" y="240" text-anchor="middle" class="lbl sm" fill="#e0c07a">collateral</text>
-            <text x="360" y="254" text-anchor="middle" class="lbl sm" fill="#e0c07a">intercostals</text>
+            <path class="pulseC" d="M326,132 C378,172 378,258 340,288" fill="none" stroke="#e0a53e" stroke-width="2.5" stroke-dasharray="5 4"></path>
+            <path class="pulseC" d="M316,152 C360,184 360,248 338,274" fill="none" stroke="#e0a53e" stroke-width="2" stroke-dasharray="5 4"></path>
+            <path d="M346,178 h14 M350,200 h14 M350,222 h14 M346,244 h14" stroke="#e0c07a" stroke-width="2"></path>
+            <text x="392" y="212" text-anchor="middle" class="lbl sm" fill="#e0c07a">collateral</text>
+            <text x="392" y="226" text-anchor="middle" class="lbl sm" fill="#e0c07a">intercostals</text>
           </g>
-          <!-- DUCT (neonate mode) -->
-          <g id="coaDuct" style="display:none">
-            <!-- PA off the RV rising toward the patient's left (screen-right) -->
-            <path d="M189,210 C206,176 245,150 280,140" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
-            <text x="228" y="168" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA (off RV)</text>
-            <!-- duct connecting PA to the descending aorta below the coarctation -->
-            <path class="pulseC" d="M280,140 C298,144 310,150 316,162" fill="none" stroke="#63d29b" stroke-width="6" stroke-linecap="round"></path>
-            <text x="266" y="184" text-anchor="middle" class="lbl sm" fill="#9be2b8">duct (PGE1)</text>
+          <!-- DUCT FLOW to lower body (preductal mode): right-to-left through the open duct -->
+          <g id="coaDuctFlow" style="display:none">
+            <path class="pulseC" d="M300,178 C314,178 326,174 334,166" fill="none" stroke="#63d29b" stroke-width="6" stroke-linecap="round"></path>
+            <path d="M334,166 l-9,0 M334,166 l-2,8" stroke="#63d29b" stroke-width="3" fill="none"></path>
+            <text x="298" y="206" text-anchor="middle" class="lbl sm" fill="#9be2b8">to lower body</text>
           </g>
+          <!-- lower body / legs (weak) -->
+          <rect x="302" y="360" width="68" height="28" rx="6" fill="#22303f" stroke="#4a6f9a" stroke-width="1.3"></rect>
+          <text x="336" y="378" text-anchor="middle" class="lbl sm" fill="#7fa8d6">legs: weak femorals</text>
           <!-- flow dot -->
-          <circle id="coaDot" class="dot" r="6" cx="250" cy="250" fill="#e05a5a"></circle>
+          <circle id="coaDot" class="dot" r="6" cx="242" cy="248" fill="#e05a5a"></circle>
         </svg>
-        <p class="foot">The aorta arises from the LV; the arch gives off the head and arm vessels, and the coarctation sits just distal to the left subclavian on the descending aorta. Hand-drawn, nothing embedded.</p>
+        <p class="foot">Aorta off the LV; the 3 arch branches end in the left subclavian; the ductus joins the left PA to the descending aorta just distal to it. The coarctation sits next to the duct - toggle to move it above (preductal) or below (postductal).</p>
       </div>
       <div class="info" id="coaInfo">
-        <p class="name" id="coaName">Older child / adult</p>
+        <p class="name" id="coaName">Postductal (adult)</p>
         <div id="coaBody"></div>
         <div class="grp" style="margin-top:10px;border-top:4px solid #e0a53e">
-          <span class="tag" style="background:#3a2f16;color:#e0c07a">Associations to own</span>
+          <span class="tag" style="background:#3a2f16;color:#e0c07a">Associations + sign</span>
           <ul>
+            <li><b>Upper-limb hypertension + weak, DELAYED femorals</b> (radio-femoral delay); murmur over the back</li>
             <li><b>Bicuspid aortic valve</b> (very common)</li>
             <li><b>Turner syndrome (45,X)</b>: short female, webbed neck</li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="warnrule big">Classic sign: <b>upper-limb hypertension with weak, DELAYED femoral pulses (radio-femoral delay)</b> + a systolic murmur over the back. Older child = <b>collateral intercostals to rib notching</b>. Critical neonate = <b>duct-dependent-SYSTEMIC to PGE1</b> keeps the duct open to feed the lower body (the C1 logic, opposite territory).</div>
+    <div class="warnrule big">The duct joins the <b>left PA to the descending aorta, just distal to the left subclavian</b>. <b>Postductal (adult):</b> pinch BELOW the duct to collaterals to rib notching, upper-limb hypertension. <b>Preductal (infantile):</b> pinch ABOVE the duct to the lower body is fed right-to-left through the open duct to <b>duct-dependent-SYSTEMIC</b>: when the duct closes the baby collapses, so give <b>PGE1</b> to reopen it.</div>
   </div>
 
   <!-- 2. PULMONARY STENOSIS + NOONAN -->
@@ -150,30 +153,33 @@
     <h2>2. Valvar pulmonary stenosis: the right-sided outflow obstruction, and the Noonan lesion (click the valve)</h2>
     <div class="flowwrap">
       <div>
-        <svg id="psSvg" viewBox="0 0 300 240" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
-          <!-- RV (lower-left) -->
-          <rect x="70" y="120" width="96" height="94" rx="10" class="box" stroke="#7aa2ff" stroke-width="2"></rect>
-          <text x="118" y="185" text-anchor="middle" class="lbl">RV (hypertrophied)</text>
-          <!-- thick RV wall to signal RVH -->
-          <rect x="70" y="120" width="12" height="94" rx="4" fill="#243049" stroke="#7aa2ff"></rect>
-          <!-- PA off the RV, up-left (screen-left) -->
-          <path d="M100,120 L84,44" fill="none" stroke="#4aa3f6" stroke-width="11" stroke-linecap="round"></path>
-          <text x="70" y="40" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA (off RV)</text>
-          <!-- narrowed pulmonary valve (clickable pinch) -->
+        <svg id="psSvg" viewBox="0 0 300 250" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- RA feeding the RV -->
+          <rect x="58" y="66" width="80" height="30" rx="6" class="box"></rect>
+          <text x="98" y="86" text-anchor="middle" class="lbl sm">RA</text>
+          <!-- RV with a hypertrophied wall -->
+          <rect x="58" y="96" width="122" height="128" rx="10" class="box" stroke="#7aa2ff" stroke-width="2"></rect>
+          <rect x="58" y="96" width="16" height="128" rx="4" fill="#243049" stroke="#7aa2ff"></rect>
+          <text x="130" y="172" text-anchor="middle" class="lbl">RV</text>
+          <text x="130" y="190" text-anchor="middle" class="lbl sm" fill="#9fb4d8">hypertrophied wall</text>
+          <!-- main pulmonary artery off the RV outflow, angling up toward the patient's left, then bifurcating -->
+          <path d="M150,96 L178,42" fill="none" stroke="#4aa3f6" stroke-width="12" stroke-linecap="round"></path>
+          <path d="M178,46 C156,36 130,36 108,42" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
+          <path d="M178,46 C202,36 230,36 252,42" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
+          <text x="200" y="66" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA (to lungs)</text>
+          <!-- narrowed pulmonary valve (clickable) at the RV-PA junction -->
           <g id="psValve" style="cursor:pointer">
-            <path d="M82,116 L96,108 M96,108 L92,120" fill="none" stroke="#e0a53e" stroke-width="3"></path>
-            <path d="M112,116 L98,108 M98,108 L102,120" fill="none" stroke="#e0a53e" stroke-width="3"></path>
-            <text x="150" y="112" text-anchor="start" class="lbl sm" fill="#e0c07a">narrowed pulmonary valve (click)</text>
+            <path d="M138,100 L151,91 M151,91 L149,104" fill="none" stroke="#e0a53e" stroke-width="3"></path>
+            <path d="M166,100 L153,91 M153,91 L155,104" fill="none" stroke="#e0a53e" stroke-width="3"></path>
           </g>
-          <!-- turbulent flow dots (above valve) -->
-          <circle id="ps1" class="dot" r="4" cx="90" cy="100" fill="#8ac6f6" opacity="0"></circle>
-          <circle id="ps2" class="dot" r="3.5" cx="90" cy="100" fill="#8ac6f6" opacity="0"></circle>
-          <circle id="ps3" class="dot" r="3" cx="90" cy="100" fill="#8ac6f6" opacity="0"></circle>
-          <!-- click / murmur location -->
-          <text x="150" y="150" text-anchor="start" class="lbl sm" fill="#e0c07a">ejection click + systolic murmur</text>
-          <text x="150" y="166" text-anchor="start" class="lbl sm" fill="#e0c07a">at the upper LEFT sternal border</text>
+          <text x="188" y="104" text-anchor="start" class="lbl sm" fill="#e0c07a">narrowed PV</text>
+          <text x="188" y="118" text-anchor="start" class="lbl sm" fill="#e0c07a">(click to run jet)</text>
+          <!-- turbulent jet dots above the valve -->
+          <circle id="ps1" class="dot" r="4" cx="152" cy="88" fill="#8ac6f6" opacity="0"></circle>
+          <circle id="ps2" class="dot" r="3.5" cx="152" cy="88" fill="#8ac6f6" opacity="0"></circle>
+          <circle id="ps3" class="dot" r="3" cx="152" cy="88" fill="#8ac6f6" opacity="0"></circle>
         </svg>
-        <p class="foot">The mirror of aortic outflow obstruction, on the RIGHT side: the RV must push through the narrowed pulmonary valve, so it hypertrophies. Click the valve to run the turbulent jet.</p>
+        <p class="foot">The RV pushes through a narrowed pulmonary valve, so it hypertrophies (thick wall). The pulmonary trunk arises from the RV outflow and heads up toward the patient's left. Click the valve to run the turbulent jet; the ejection click and murmur (upper LEFT sternal border) are in the notes at right.</p>
       </div>
       <div class="info">
         <p class="name">Pulmonary stenosis (valvar)</p>
@@ -205,13 +211,13 @@
           <text x="110" y="86" text-anchor="middle" class="lbl">giant RA</text>
           <!-- normal AV annulus (dashed) where the TV SHOULD sit -->
           <line x1="60" y1="118" x2="160" y2="118" stroke="#63d29b" stroke-dasharray="4 3" stroke-width="1.5"></line>
-          <text x="110" y="112" text-anchor="middle" class="lbl sm" fill="#9be2b8">true annulus (TV should be here)</text>
+          <text x="110" y="112" text-anchor="middle" class="lbl sm" fill="#9be2b8">true TV annulus</text>
           <!-- atrialized RV band -->
           <rect x="60" y="118" width="100" height="46" fill="#26314a" opacity=".6"></rect>
-          <text x="110" y="146" text-anchor="middle" class="lbl sm" fill="#c9a6ff">atrialized RV</text>
+          <text x="110" y="138" text-anchor="middle" class="lbl sm" fill="#c9a6ff">atrialized RV</text>
           <!-- DISPLACED tricuspid leaflets (pushed apically) -->
           <path d="M60,164 L110,164 M110,164 L150,164" fill="none" stroke="#e0a53e" stroke-width="3.5"></path>
-          <text x="180" y="166" text-anchor="start" class="lbl sm" fill="#e0c07a">displaced TV leaflets</text>
+          <text x="106" y="156" text-anchor="middle" class="lbl sm" fill="#e0c07a">displaced TV leaflets</text>
           <!-- small functional RV -->
           <path d="M60,164 L160,164 L150,236 L74,236 Z" fill="#0b1020" stroke="#2b3552" stroke-width="1.5"></path>
           <text x="110" y="212" text-anchor="middle" class="lbl sm">small functional RV</text>
@@ -226,8 +232,8 @@
             <path d="M110,96 L104,110 M110,96 L116,110" fill="none" stroke="#e53e3e" stroke-width="4"></path>
             <text x="128" y="130" text-anchor="start" class="lbl sm" fill="#ff9aa2">severe TR</text>
           </g>
-          <circle id="ebBtn" cx="110" cy="200" r="15" fill="#1a4b7a" stroke="#7aa2ff" stroke-width="1.5" style="cursor:pointer"></circle>
-          <text x="110" y="204" text-anchor="middle" class="lbl sm" fill="#dbe9ff" style="pointer-events:none">play</text>
+          <circle id="ebBtn" cx="110" cy="262" r="15" fill="#1a4b7a" stroke="#7aa2ff" stroke-width="1.5" style="cursor:pointer"></circle>
+          <text x="110" y="266" text-anchor="middle" class="lbl sm" fill="#dbe9ff" style="pointer-events:none">play</text>
         </svg>
         <p class="foot">The septal and posterior tricuspid leaflets are displaced DOWN into the RV, so part of the RV is "atrialized," the working RV is tiny, and the valve leaks (severe TR). Click play to run the regurgitant jet.</p>
       </div>
@@ -269,12 +275,12 @@
           <text x="228" y="140" text-anchor="middle" class="lbl sm">LA</text>
           <!-- morphologic LV (below RA) -> to PA -->
           <path d="M96,155 L168,155 L168,262 L96,262 Z" class="box"></path>
-          <text x="132" y="212" text-anchor="middle" class="lbl sm">morph. LV</text>
-          <text x="132" y="228" text-anchor="middle" class="lbl sm" fill="#8ac6f6">to lungs</text>
+          <text x="140" y="212" text-anchor="middle" class="lbl sm">morph. LV</text>
+          <text x="140" y="228" text-anchor="middle" class="lbl sm" fill="#8ac6f6">to lungs</text>
           <!-- morphologic RV (below LA, SYSTEMIC) -> to aorta -->
           <path d="M192,155 L264,155 L264,262 L192,262 Z" class="box" stroke="#e53e3e" stroke-width="2"></path>
-          <text x="228" y="208" text-anchor="middle" class="lbl sm" fill="#ffb3bd">morph. RV</text>
-          <text x="228" y="224" text-anchor="middle" class="lbl sm" fill="#ff9aa2">SYSTEMIC (fails)</text>
+          <text x="216" y="208" text-anchor="middle" class="lbl sm" fill="#ffb3bd">morph. RV</text>
+          <text x="216" y="224" text-anchor="middle" class="lbl sm" fill="#ff9aa2">SYSTEMIC (fails)</text>
           <!-- blue path: RA -> mLV -> PA -> lungs -->
           <path d="M116,150 L116,155" stroke="#4aa3f6" stroke-width="3"></path>
           <path d="M116,155 L116,80 C116,58 90,56 78,60" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
@@ -285,7 +291,7 @@
           <text x="270" y="92" text-anchor="middle" class="lbl sm" fill="#ffb3bd">Aorta (off mRV)</text>
           <!-- heart-block bolt at the AV region -->
           <path d="M180,158 L172,178 L182,178 L174,198" fill="none" stroke="#e0a53e" stroke-width="2.5"></path>
-          <text x="180" y="214" text-anchor="middle" class="lbl sm" fill="#e0c07a">complete heart block</text>
+          <text x="180" y="282" text-anchor="middle" class="lbl sm" fill="#e0c07a">complete heart block (at the AV junction)</text>
           <!-- flow dots -->
           <circle id="ccB" class="dot" r="5" cx="132" cy="230" fill="#4aa3f6"></circle>
           <circle id="ccR" class="dot" r="5" cx="228" cy="230" fill="#e05a5a"></circle>
@@ -380,8 +386,8 @@
           </g>
           <text x="85" y="112" text-anchor="middle" class="lbl sm" fill="#8ac6f6">bilateral BI-lobed lungs</text>
           <!-- many spleens -->
-          <g fill="#b57af6"><circle cx="72" cy="128" r="4"></circle><circle cx="84" cy="128" r="4"></circle><circle cx="96" cy="128" r="4"></circle></g>
-          <text x="120" y="132" text-anchor="start" class="lbl sm" fill="#c9a6ff">many spleens</text>
+          <g fill="#b57af6"><circle cx="72" cy="124" r="4"></circle><circle cx="84" cy="124" r="4"></circle><circle cx="96" cy="124" r="4"></circle></g>
+          <text x="84" y="142" text-anchor="middle" class="lbl sm" fill="#c9a6ff">many spleens</text>
         </svg>
         <h3 style="color:#8ac6f6">LEFT atrial isomerism</h3>
         <p class="kv">Two LEFT sides. Bilateral bi-lobed lungs (hyparterial bronchi), <b>multiple small spleens (POLYSPLENIA)</b>, an <b>interrupted IVC</b> (azygos continuation) and <b>conduction disease / heart block</b>. Milder cardiac disease.</p>
@@ -397,13 +403,13 @@
 
 <script>
 (function(){
-  // ---------- 1. Coarctation: mode toggle + flow dot ----------
+  // ---------- 1. Coarctation: preductal / postductal toggle + flow dot ----------
   var coaDot=document.getElementById('coaDot');
-  var coaPts=[[247,268],[250,150],[250,112],[290,84],[320,116],[320,220],[320,312]];
+  var coaPts=[[242,266],[262,222],[278,182],[278,150],[307,114],[336,150],[336,224],[336,352]];
   var ct=0;
   function animCoa(){
     var n=coaPts.length-1;
-    ct+=0.0035; if(ct>=1)ct=0;
+    ct+=0.003; if(ct>=1)ct=0;
     var seg=Math.min(Math.floor(ct*n),n-1), f=ct*n-seg;
     var a=coaPts[seg], b=coaPts[seg+1];
     coaDot.setAttribute('cx',a[0]+(b[0]-a[0])*f);
@@ -411,30 +417,38 @@
     requestAnimationFrame(animCoa);
   }
   animCoa();
-  function coaOld(){
-    document.getElementById('coaOld').classList.add('on');
-    document.getElementById('coaNeo').classList.remove('on');
+  function coaPost(){
+    document.getElementById('coaPost').classList.add('on');
+    document.getElementById('coaPre').classList.remove('on');
+    document.getElementById('coaPinch').setAttribute('transform','translate(336,182)');
     document.getElementById('coaCollat').style.display='';
-    document.getElementById('coaDuct').style.display='none';
-    document.getElementById('coaName').textContent='Older child / adult';
-    document.getElementById('coaBody').innerHTML='<p class="kv"><b>Blood finds a way around the dam.</b> Over years, collateral arteries (internal mammary to intercostals) enlarge to bypass the narrowing and carry blood to the lower body. The pulsatile collaterals <b>erode the undersurface of the ribs to rib notching</b> on the chest X-ray. A systolic murmur is heard <b>over the back</b>.</p>';
+    document.getElementById('coaDuctFlow').style.display='none';
+    document.getElementById('coaDuctLbl').textContent='ligamentum';
+    document.getElementById('coaDuctLbl').setAttribute('y','158');
+    document.getElementById('coaCoarctLbl').setAttribute('y','192');
+    document.getElementById('coaName').textContent='Postductal (adult)';
+    document.getElementById('coaBody').innerHTML='<p class="kv">The narrowing is <b>DISTAL to the duct</b> (now closed to the ligamentum). Blood finds a way around the dam: <b>collateral arteries (internal mammary to intercostals) enlarge</b> and their pulsation <b>erodes the undersurface of the ribs = rib notching</b>. Presents later with <b>upper-limb hypertension</b>, a murmur over the back, and weak, delayed femorals.</p>';
   }
-  function coaNeo(){
-    document.getElementById('coaNeo').classList.add('on');
-    document.getElementById('coaOld').classList.remove('on');
+  function coaPre(){
+    document.getElementById('coaPre').classList.add('on');
+    document.getElementById('coaPost').classList.remove('on');
+    document.getElementById('coaPinch').setAttribute('transform','translate(336,150)');
     document.getElementById('coaCollat').style.display='none';
-    document.getElementById('coaDuct').style.display='';
-    document.getElementById('coaName').textContent='Critical neonate (duct-dependent)';
-    document.getElementById('coaBody').innerHTML='<p class="kv"><b>The duct was feeding the lower body.</b> In a critical coarctation the lower body is fed through the ductus. When the duct CLOSES, the lower body suddenly loses its supply and the baby collapses in shock with absent femoral pulses (not cyanosis).</p><p class="kv" style="color:#9be2b8"><b>Duct-dependent-SYSTEMIC:</b> give <b>PGE1</b> to reopen the duct and restore lower-body perfusion (the C1 logic, but the duct feeds the systemic circulation distal to the coarctation).</p>';
+    document.getElementById('coaDuctFlow').style.display='';
+    document.getElementById('coaDuctLbl').textContent='ductus (open)';
+    document.getElementById('coaDuctLbl').setAttribute('y','186');
+    document.getElementById('coaCoarctLbl').setAttribute('y','146');
+    document.getElementById('coaName').textContent='Preductal (infantile, duct-dependent)';
+    document.getElementById('coaBody').innerHTML='<p class="kv">The narrowing is <b>PROXIMAL to the duct</b>, so the lower body is fed <b>right-to-left through the OPEN duct</b> (PA to descending aorta, below the pinch). When the duct <b>closes</b>, the lower body suddenly loses its supply and the baby <b>collapses in shock with absent femoral pulses</b> (not cyanosis).</p><p class="kv" style="color:#9be2b8"><b>Duct-dependent-SYSTEMIC:</b> give <b>PGE1</b> to reopen the duct and restore lower-body perfusion.</p>';
   }
-  document.getElementById('coaOld').addEventListener('click',coaOld);
-  document.getElementById('coaNeo').addEventListener('click',coaNeo);
-  coaOld();
+  document.getElementById('coaPost').addEventListener('click',coaPost);
+  document.getElementById('coaPre').addEventListener('click',coaPre);
+  coaPost();
 
   // ---------- 2. Pulmonary stenosis: click valve -> turbulent jet ----------
   var ps=[document.getElementById('ps1'),document.getElementById('ps2'),document.getElementById('ps3')];
   var psRun=false, psT=[0,0.33,0.66];
-  var psPath=[[100,116],[92,96],[84,72],[86,48]];
+  var psPath=[[152,92],[162,74],[170,56],[178,44]];
   function animPs(){
     if(psRun){
       for(var i=0;i<ps.length;i++){
