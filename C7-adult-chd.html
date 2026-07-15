@@ -1,0 +1,234 @@
+<meta charset="utf-8">
+<title>C7 - Adult congenital heart disease</title>
+<style>
+  :root{--bg:#0e1220;--panel:#161c2e;--ink:#e8ecf5;--muted:#95a1bd;--accent:#7aa2ff;--pos:#38a169;--neg:#e53e3e;--warn:#e0a53e;--lo:#4aa3f6;--pink:#c95d6c}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .card{background:var(--panel);border:1px solid #232b45;border-radius:14px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .seg button{flex:1;min-width:150px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
+  .seg button:hover{border-color:var(--accent)}
+  .rule{background:#1c2540;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .warnrule{background:#3a2f16;border-left:3px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
+  .big{font-size:15px;font-weight:900;color:#fff}
+  .flowwrap{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;align-items:start}
+  @media(max-width:820px){.flowwrap{grid-template-columns:1fr}}
+  .box{fill:#0b1020;stroke:#2b3552;stroke-width:1.5}
+  .lbl{fill:#cdd6ea;font:600 12px sans-serif}
+  .lbl.sm{font:600 10.5px sans-serif;fill:#95a1bd}
+  .info{background:#0b1020;border-radius:10px;padding:14px;border-left:4px solid var(--accent)}
+  .info .name{font-size:17px;font-weight:900;margin:0 0 2px}
+  .info p{font-size:13.5px;margin:6px 0 0}
+  .kv{font-size:13.5px;margin:2px 0}
+  .cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  @media(max-width:760px){.cols3{grid-template-columns:1fr}}
+  .col{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px}
+  .col h3{margin:0 0 4px;font-size:14.5px}
+  .col .sysv{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;margin:4px 0 8px}
+  .col ul{margin:6px 0 0;padding-left:18px;font-size:13px}
+  .col li{margin:4px 0}
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tbl th,.tbl td{text-align:left;padding:7px 10px;border-bottom:1px solid #232b45;vertical-align:top}
+  .tbl th{color:var(--accent);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .tbl td.sign{font-weight:800;white-space:nowrap;color:#dbe9ff}
+  .pulseC{animation:pc 1.8s ease-in-out infinite}
+  @keyframes pc{0%,100%{opacity:.3}50%{opacity:1}}
+</style>
+
+<div class="wrap">
+  <h1>C7 - Adult congenital heart disease (the LATE lesion the repair left behind)</h1>
+  <p class="sub">A childhood repair is a trade, not a cure: the adult presents with the residual or late lesion. Three archetypes carry the chapter. Repaired TOF to chronic pulmonary regurgitation (Q1). Adult D-TGA defined by WHICH operation, and TGA + VSD + PS = Rastelli (Q17). Eisenmenger = a big shunt that raised the PVR above systemic and reversed. Plus the sign-to-lesion matching set (Q14).</p>
+
+  <!-- 1. REPAIRED TOF -> PULMONARY REGURGITATION -->
+  <div class="card">
+    <h2>1. Repaired TOF: the transannular patch cures the obstruction but leaves free pulmonary regurgitation (Q1)</h2>
+    <div class="seg" style="max-width:520px">
+      <button id="tofSys" class="on">Systole (RV to PA)</button>
+      <button id="tofDia">Diastole (free PR: PA to RV)</button>
+    </div>
+    <div class="flowwrap">
+      <div>
+        <svg id="tofSvg" viewBox="0 0 360 300" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- RA feeding the RV -->
+          <rect x="54" y="70" width="74" height="28" rx="6" class="box"></rect>
+          <text x="91" y="89" text-anchor="middle" class="lbl sm">RA</text>
+          <!-- the DILATED RV (screen-left) -->
+          <rect x="54" y="98" width="132" height="150" rx="12" class="box" stroke="#7aa2ff" stroke-width="2"></rect>
+          <text x="120" y="184" text-anchor="middle" class="lbl">RV</text>
+          <text x="120" y="202" text-anchor="middle" class="lbl sm" fill="#ff9aa2">dilated (volume load)</text>
+          <!-- RV outflow to PA (widened by the patch, no valve), up toward the patient's left -->
+          <path d="M150,98 L182,40" fill="none" stroke="#4aa3f6" stroke-width="14" stroke-linecap="round"></path>
+          <path d="M182,44 C160,34 132,34 110,40" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
+          <path d="M182,44 C206,34 236,34 258,40" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
+          <text x="205" y="64" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PA</text>
+          <!-- transannular patch marker: a widened, valveless junction -->
+          <text x="196" y="104" text-anchor="start" class="lbl sm" fill="#e0c07a">transannular</text>
+          <text x="196" y="118" text-anchor="start" class="lbl sm" fill="#e0c07a">patch (no valve)</text>
+          <!-- forward flow (systole) -->
+          <g id="tofFwd">
+            <circle class="pulseC" cx="158" cy="82" r="4" fill="#8ac6f6"></circle>
+            <circle class="pulseC" cx="168" cy="64" r="4" fill="#8ac6f6"></circle>
+            <circle class="pulseC" cx="177" cy="50" r="4" fill="#8ac6f6"></circle>
+          </g>
+          <!-- regurgitation (diastole): arrow PA -> RV -->
+          <g id="tofReg" style="display:none">
+            <path class="pulseC" d="M176,52 L156,92" fill="none" stroke="#e53e3e" stroke-width="6" stroke-linecap="round"></path>
+            <path d="M156,92 l0,-11 M156,92 l-10,-3" stroke="#e53e3e" stroke-width="4" fill="none"></path>
+            <text x="150" y="60" text-anchor="end" class="lbl sm" fill="#ff9aa2">free PR</text>
+          </g>
+        </svg>
+        <p class="foot" style="color:var(--muted);font-size:12px;margin-top:6px">The patch widened the outflow but removed the valve, so in diastole blood falls back into the RV every beat. Over years that volume load dilates then fails the RV.</p>
+      </div>
+      <div class="info" id="tofInfo">
+        <p class="name" id="tofName">Systole: RV to PA</p>
+        <div id="tofBody"></div>
+      </div>
+    </div>
+    <div class="warnrule big">Q1: about TOF repair in adults, all true EXCEPT <b>A</b> ("the later the repair the better"). <b>EARLIER primary repair gives better outcomes.</b> The dominant late lesion is chronic <b>pulmonary regurgitation</b> to RV dilation to dysfunction to arrhythmia / sudden-death risk; treat with a <b>timed pulmonary valve replacement (PVR)</b> before the RV is too far gone.</div>
+  </div>
+
+  <!-- 2. ADULT D-TGA: THREE OPERATIONS -->
+  <div class="card">
+    <h2>2. Adult D-TGA: which operation defines the adult problem (Q17)</h2>
+    <div class="cols3">
+      <div class="col" style="border-top:4px solid var(--neg)">
+        <h3>Atrial switch<br>(Mustard / Senning)</h3>
+        <span class="sysv" style="background:#3a2530;color:#ffb3bd">systemic = morph RV</span>
+        <ul>
+          <li>Baffle redirects blood at the <b>atrial</b> level</li>
+          <li>The <b>morphologic RV pumps to the body</b> to <b>fails late</b></li>
+          <li>Baffle <b>leak / obstruction</b>, atrial arrhythmia / sinus node disease</li>
+          <li>The historic repair</li>
+        </ul>
+      </div>
+      <div class="col" style="border-top:4px solid var(--pos)">
+        <h3>Arterial switch<br>(ASO)</h3>
+        <span class="sysv" style="background:#12331f;color:#9be2b8">systemic = LV (anatomic)</span>
+        <ul>
+          <li>Great arteries <b>switched back</b>, coronaries <b>reimplanted</b></li>
+          <li>The <b>LV is the systemic pump</b> (correct)</li>
+          <li>Late: neo-aortic root dilation / regurgitation, coronary ostial or branch-PA stenosis</li>
+          <li>The modern repair</li>
+        </ul>
+      </div>
+      <div class="col" style="border-top:4px solid var(--accent)">
+        <h3>Rastelli<br>(TGA + VSD + PS)</h3>
+        <span class="sysv" style="background:#12283a;color:#8ac6f6">two-ventricle repair</span>
+        <ul>
+          <li>For D-TGA with a <b>large VSD + LVOTO / PS</b></li>
+          <li><b>LV to aorta</b> baffle through the VSD</li>
+          <li><b>RV to PA</b> valved conduit</li>
+          <li>A <b>biventricular</b> repair (two good ventricles)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warnrule big">Q17: about adult D-TGA, all true EXCEPT <b>B</b>. D-TGA with severe PS + a large VSD is repaired by the <b>Rastelli procedure</b> (LV-to-aorta baffle through the VSD + an RV-to-PA conduit), <b>NOT a univentricular / Fontan repair</b>: this heart has two adequate ventricles, so a Fontan (single-ventricle pathway, C6) does not apply.</div>
+  </div>
+
+  <!-- 3. EISENMENGER -->
+  <div class="card">
+    <h2>3. Eisenmenger: a big shunt raises the PVR above systemic, so it reverses (toggle the two stages)</h2>
+    <div class="seg" style="max-width:560px">
+      <button id="eisEarly" class="on">Early: L to R shunt (pink)</button>
+      <button id="eisRev">Eisenmenger: R to L (cyanotic)</button>
+    </div>
+    <div class="flowwrap">
+      <div>
+        <svg id="eisSvg" viewBox="0 0 340 250" style="width:100%;height:auto;background:#0b1020;border-radius:10px">
+          <!-- RV (screen-left) and LV (screen-right) with a VSD between them -->
+          <path d="M50,60 L158,60 L150,220 L74,220 Z" class="box" stroke="#7aa2ff" stroke-width="1.5"></path>
+          <text x="104" y="150" text-anchor="middle" class="lbl">RV</text>
+          <path d="M182,60 L290,60 L266,220 L190,220 Z" class="box" stroke="#7aa2ff" stroke-width="1.5"></path>
+          <text x="236" y="150" text-anchor="middle" class="lbl">LV</text>
+          <!-- the VSD (a gap in the septum) -->
+          <rect x="156" y="120" width="28" height="44" rx="4" fill="#0b1020" stroke="#e0a53e" stroke-width="1.5"></rect>
+          <text x="170" y="112" text-anchor="middle" class="lbl sm" fill="#e0c07a">VSD</text>
+          <!-- PVR vs SVR readout -->
+          <text id="eisPvr" x="170" y="238" text-anchor="middle" class="lbl sm" fill="#8ac6f6">PVR &lt; systemic (SVR)</text>
+          <!-- shunt arrow (direction + colour set by JS) -->
+          <path id="eisArrow" class="pulseC" d="M210,142 L130,142" fill="none" stroke="#e53e3e" stroke-width="7" stroke-linecap="round"></path>
+          <path id="eisHead" d="M130,142 l12,-6 M130,142 l12,6" stroke="#e53e3e" stroke-width="5" fill="none"></path>
+        </svg>
+        <p class="foot" style="color:var(--muted);font-size:12px;margin-top:6px">The direction of flow across the VSD is decided by which resistance is higher. When the pulmonary vascular disease pushes PVR above systemic, the shunt flips to right-to-left.</p>
+      </div>
+      <div class="info" id="eisInfo">
+        <p class="name" id="eisName">Early: left-to-right shunt</p>
+        <div id="eisBody"></div>
+      </div>
+    </div>
+    <div class="warnrule big">Once the shunt has REVERSED, the defect is the right heart's only pressure pop-off, so Eisenmenger is <b>INOPERABLE</b> (closing it is fatal), <b>pregnancy is contraindicated</b>, and management is supportive + pulmonary vasodilators + transplant. This is the <b>C1 PVR number crossing the systemic line</b>. Repair big shunts EARLY, before the PVR fixes.</div>
+  </div>
+
+  <!-- 4. SIGN-TO-LESION MATCHING (Q14) -->
+  <div class="card">
+    <h2>4. Sign-to-lesion matching: read one physical sign back to its lesion (Q14)</h2>
+    <table class="tbl">
+      <thead><tr><th>Physical sign</th><th>Lesion</th></tr></thead>
+      <tbody>
+        <tr><td class="sign">Fixed, widely split S2</td><td>Secundum <b>ASD</b> (RV volume-loaded through the whole respiratory cycle)</td></tr>
+        <tr><td class="sign">Continuous "machinery" murmur</td><td><b>PDA</b> (flow across the duct in systole and diastole)</td></tr>
+        <tr><td class="sign">Holosystolic murmur at the LLSB</td><td><b>VSD</b> (also the site of tricuspid regurgitation)</td></tr>
+        <tr><td class="sign">Ejection click, upper-LEFT sternal border</td><td>Valvar <b>pulmonary stenosis</b> (domed mobile valve, from C5)</td></tr>
+        <tr><td class="sign">Radio-femoral delay + murmur over the back</td><td><b>Coarctation</b> of the aorta (from C5)</td></tr>
+        <tr><td class="sign">Pulsatile liver + large JVP v wave</td><td>Severe <b>tricuspid regurgitation</b> / right-heart failure</td></tr>
+        <tr><td class="sign">Central cyanosis + clubbing</td><td>Chronic right-to-left shunt / <b>Eisenmenger</b></td></tr>
+      </tbody>
+    </table>
+    <div class="warnrule big">Q14 is a match-the-column question: all pairs true EXCEPT <b>E</b> per the key (the flagged mismatch is built around the holosystolic / click / hepatomegaly set). The exact option wording is not in the extracted signal, so learn the clean pairs above and <b>confirm the precise wording of option E with the course</b> rather than overstate certainty.</div>
+  </div>
+
+  <p class="foot" style="color:var(--muted);font-size:12px">C7 visual - Module 5 CHD. Hand-drawn inline SVG + tables, self-contained. Final CHD lesson (C1 to C7).</p>
+</div>
+
+<script>
+(function(){
+  // ---------- 1. Repaired TOF: systole / diastole ----------
+  var tofModes={
+    sys:{ name:'Systole: RV to PA',
+      body:'<p class="kv">In systole the RV ejects forward through the widened, valveless outflow into the pulmonary artery. The patch did its job: <b>no more obstruction</b>.</p><p class="kv" style="margin-top:8px;color:#9fb4d8">The problem only shows in diastole (toggle it).</p>' },
+    dia:{ name:'Diastole: free pulmonary regurgitation',
+      body:'<p class="kv">With <b>no pulmonary valve</b>, diastole lets blood fall <b>back into the RV</b> (free PR). Every beat adds a volume load.</p><p class="kv" style="margin-top:8px">Over years: <b>RV dilates to RV dysfunction to ventricular arrhythmia + sudden-death risk</b>. Survey with cardiac MRI and do a <b>timed pulmonary valve replacement</b> before it is irreversible.</p>' }
+  };
+  function tof(k){
+    document.getElementById('tofSys').classList.toggle('on',k==='sys');
+    document.getElementById('tofDia').classList.toggle('on',k==='dia');
+    document.getElementById('tofFwd').style.display=(k==='sys')?'':'none';
+    document.getElementById('tofReg').style.display=(k==='dia')?'':'none';
+    document.getElementById('tofName').textContent=tofModes[k].name;
+    document.getElementById('tofBody').innerHTML=tofModes[k].body;
+  }
+  document.getElementById('tofSys').addEventListener('click',function(){tof('sys');});
+  document.getElementById('tofDia').addEventListener('click',function(){tof('dia');});
+  tof('sys');
+
+  // ---------- 3. Eisenmenger: early / reversed ----------
+  var eisModes={
+    early:{ name:'Early: left-to-right shunt (pink)',
+      pvr:'PVR < systemic (SVR)', pvrFill:'#8ac6f6',
+      arrow:'M210,142 L130,142', head:'M130,142 l12,-6 M130,142 l12,6', color:'#e53e3e',
+      body:'<p class="kv">While the <b>PVR is still below systemic</b>, blood shunts <b>left-to-right</b> (LV to RV through the VSD). The extra pulmonary flow keeps the patient <b>acyanotic (pink)</b>, but it is slowly damaging the pulmonary arterioles.</p>' },
+    rev:{ name:'Eisenmenger: right-to-left (cyanotic)',
+      pvr:'PVR > systemic (SVR)', pvrFill:'#ff9aa2',
+      arrow:'M130,142 L210,142', head:'M210,142 l-12,-6 M210,142 l-12,6', color:'#4aa3f6',
+      body:'<p class="kv">Years of high flow have raised the PVR until it is <b>fixed and ABOVE systemic</b>. Now the shunt <b>REVERSES to right-to-left</b> (RV to LV), deoxygenated blood reaches the body, and the patient turns <b>cyanotic, with clubbing and erythrocytosis</b>.</p><p class="kv" style="margin-top:8px;color:#ff9aa2"><b>INOPERABLE</b>: closing the shunt now removes the right heart\'s only pop-off and is fatal.</p>' }
+  };
+  function eis(k){
+    var m=eisModes[k];
+    document.getElementById('eisEarly').classList.toggle('on',k==='early');
+    document.getElementById('eisRev').classList.toggle('on',k==='rev');
+    var pv=document.getElementById('eisPvr'); pv.textContent=m.pvr; pv.setAttribute('fill',m.pvrFill);
+    var ar=document.getElementById('eisArrow'); ar.setAttribute('d',m.arrow); ar.setAttribute('stroke',m.color);
+    var hd=document.getElementById('eisHead'); hd.setAttribute('d',m.head); hd.setAttribute('stroke',m.color);
+    document.getElementById('eisName').textContent=m.name;
+    document.getElementById('eisBody').innerHTML=m.body;
+  }
+  document.getElementById('eisEarly').addEventListener('click',function(){eis('early');});
+  document.getElementById('eisRev').addEventListener('click',function(){eis('rev');});
+  eis('early');
+})();
+</script>
