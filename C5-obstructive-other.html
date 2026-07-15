@@ -470,11 +470,11 @@
   // ---------- 3. Ebstein: play the TR jet ----------
   var ebJet=document.getElementById('ebJet'), ebOn=false, ebPhase=0;
   function animEb(){
-    if(ebOn){ ebPhase+=0.02; ebJet.setAttribute('opacity',(0.4+0.6*Math.abs(Math.sin(ebPhase))).toFixed(2)); }
+    if(ebOn){ ebPhase+=0.02; ebJet.style.opacity=(0.4+0.6*Math.abs(Math.sin(ebPhase))).toFixed(2); }
     requestAnimationFrame(animEb);
   }
   animEb();
-  document.getElementById('ebBtn').addEventListener('click',function(){ ebOn=!ebOn; if(!ebOn)ebJet.setAttribute('opacity','0'); });
+  document.getElementById('ebBtn').addEventListener('click',function(){ ebOn=!ebOn; if(!ebOn)ebJet.style.opacity='0'; });
 
   // ---------- 4. ccTGA: two flow dots (physiologically corrected) ----------
   var ccB=document.getElementById('ccB'), ccR=document.getElementById('ccR');
