@@ -10,9 +10,11 @@
   .card{background:var(--panel);border:1px solid #232b45;border-radius:14px;padding:16px;margin-bottom:18px}
   .card h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
   .seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-  .seg button{flex:1;min-width:150px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+  .seg button{flex:1;min-width:140px;background:#0b1020;border:1px solid #2b3552;color:var(--ink);border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
   .seg button.on{background:#1a4b7a;border-color:var(--accent);color:#dbe9ff}
   .seg button:hover{border-color:var(--accent)}
+  .seg.sub button{padding:8px;font-size:12px;font-weight:600}
+  .seg.sub button.on{background:#243b57}
   .rule{background:#1c2540;border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
   .warnrule{background:#3a2f16;border-left:3px solid var(--warn);padding:10px 12px;border-radius:6px;font-size:14px;margin-top:10px}
   .big{font-size:15px;font-weight:900;color:#fff}
@@ -22,7 +24,7 @@
   .lbl{fill:#cdd6ea;font:600 12px sans-serif}
   .lbl.sm{font:600 10.5px sans-serif;fill:#95a1bd}
   .info{background:#0b1020;border-radius:10px;padding:14px;border-left:4px solid var(--accent)}
-  .info .name{font-size:18px;font-weight:900;margin:0 0 2px}
+  .info .name{font-size:17px;font-weight:900;margin:0 0 2px}
   .info p{font-size:13.5px;margin:6px 0 0}
   .grp{background:#0b1020;border:1px solid #2b3552;border-radius:12px;padding:14px}
   .grp .tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;margin-bottom:8px}
@@ -44,15 +46,25 @@
 
 <div class="wrap">
   <h1>C6 - The single-ventricle pathway (Glenn and Fontan)</h1>
-  <p class="sub">One usable pumping ventricle, so it drives the BODY and you plumb the systemic veins straight onto the pulmonary artery to flow through the lungs PASSIVELY, with no pump. Staged: Norwood sets up the neonate, the bidirectional Glenn sends the SVC to the pulmonary artery, the Fontan adds the IVC. Anchors: Q2 (Glenn prerequisites, the odd-one-out is a HIGH PVR = answer B) and Q10 (Glenn complications, the odd-one-out is protein-losing enteropathy, which is a FONTAN problem = answer E).</p>
+  <p class="sub">One usable pumping ventricle, so it drives the BODY and you plumb the systemic veins straight onto the pulmonary artery to flow through the lungs PASSIVELY, with no pump. Anchors: Q2 (Glenn prerequisites, the odd-one-out is a HIGH PVR = answer B) and Q10 (Glenn complications, the odd-one-out is protein-losing enteropathy, a FONTAN problem = answer E).</p>
 
-  <!-- 1. THE STAGED PATHWAY -->
+  <!-- 1. THE STAGED PATHWAY (Stage 1 tailored, then Glenn, then Fontan) -->
   <div class="card">
-    <h2>1. The staged pathway: Norwood, then bidirectional Glenn (SVC to PA), then Fontan (add the IVC) - step through it</h2>
+    <h2>1. The staged pathway: Stage 1 is TAILORED to the lesion, then everyone goes Glenn then Fontan</h2>
+    <div class="rule big" style="margin-bottom:12px">The goal at every stage is a <b>BALANCED circulation</b>: the body perfused + the lungs getting the RIGHT amount of flow (not too much, not too little) + free atrial mixing. <b>Stage 1 depends on WHAT is wrong</b>; Stages 2 and 3 are the same for everyone.</div>
     <div class="seg" style="max-width:720px">
-      <button id="nwBtn" class="on">Stage 1: Norwood (neonate)</button>
-      <button id="glBtn">Stage 2: bidirectional Glenn</button>
-      <button id="fnBtn">Stage 3: Fontan</button>
+      <button id="stg1" class="on">Stage 1: first-stage palliation</button>
+      <button id="stg2">Stage 2: bidirectional Glenn</button>
+      <button id="stg3">Stage 3: Fontan</button>
+    </div>
+    <div class="seg sub" id="s1sub" style="max-width:720px">
+      <button id="lesNw" class="on">Obstructed aorta (HLHS): Norwood</button>
+      <button id="lesBand">Too MUCH lung flow: PA band</button>
+      <button id="lesBt">Too LITTLE lung flow: BT shunt</button>
+    </div>
+    <div class="seg sub" id="nwsub" style="max-width:420px;display:none">
+      <button id="nwBtBtn" class="on">Norwood lung supply: BT shunt</button>
+      <button id="nwSanoBtn">Norwood lung supply: Sano</button>
     </div>
     <div class="flowwrap">
       <div>
@@ -62,7 +74,7 @@
           <text x="86" y="90" text-anchor="middle" class="lbl sm" fill="#bcd4f0">R lung</text>
           <ellipse cx="354" cy="86" rx="42" ry="30" fill="#182a3f" stroke="#4aa3f6" stroke-width="1.5"></ellipse>
           <text x="354" y="90" text-anchor="middle" class="lbl sm" fill="#bcd4f0">L lung</text>
-          <!-- pulmonary arteries (the confluence blood must cross passively) -->
+          <!-- branch pulmonary arteries (the confluence) -->
           <path d="M120,126 L320,126" fill="none" stroke="#4aa3f6" stroke-width="10" stroke-linecap="round"></path>
           <path d="M124,124 C108,112 96,104 90,96" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
           <path d="M316,124 C332,112 344,104 350,96" fill="none" stroke="#4aa3f6" stroke-width="7" stroke-linecap="round"></path>
@@ -78,60 +90,100 @@
           <text x="220" y="272" text-anchor="middle" class="lbl">single ventricle</text>
           <text x="220" y="290" text-anchor="middle" class="lbl sm" fill="#9fb4d8">pumps the BODY</text>
 
-          <!-- aorta off the single ventricle to the BODY (screen-right = patient's left) -->
+          <!-- aorta off the ventricle to the BODY (label changes: neo-aorta vs aorta) -->
           <path d="M262,234 L262,168 C262,140 356,150 388,236" fill="none" stroke="#c95d6c" stroke-width="8" stroke-linecap="round"></path>
           <rect x="352" y="238" width="66" height="32" rx="7" fill="#3a2530" stroke="#c95d6c" stroke-width="1.3"></rect>
           <text x="385" y="258" text-anchor="middle" class="lbl sm" fill="#ffb3bd">body</text>
-          <text x="322" y="182" text-anchor="middle" class="lbl sm" fill="#ffb3bd">aorta</text>
+          <text id="aoLbl" x="322" y="184" text-anchor="middle" class="lbl sm" fill="#ffb3bd">aorta</text>
 
-          <!-- upper + lower body venous sources (screen-left = patient's right, where SVC/IVC and the Glenn/Fontan sit) -->
           <text x="70" y="200" text-anchor="middle" class="lbl sm" fill="#7fa8d6">upper body</text>
           <text x="70" y="406" text-anchor="middle" class="lbl sm" fill="#7fa8d6">lower body</text>
 
-          <!-- ================= NORWOOD ================= -->
-          <g id="nwGrp">
-            <!-- SVC into RA -->
-            <path d="M112,208 L112,204 C112,200 130,200 162,205" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
-            <path d="M112,150 L112,208" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
+          <!-- ============ NORWOOD ============ -->
+          <g id="norwoodG">
+            <!-- SVC + IVC both into the RA -->
+            <path d="M112,150 L112,206 C112,200 130,200 162,205" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
             <text x="96" y="168" text-anchor="middle" class="lbl sm" fill="#7fa8d6">SVC</text>
-            <!-- IVC into RA -->
             <path d="M112,398 L112,250 C112,244 132,240 162,236" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
             <text x="96" y="360" text-anchor="middle" class="lbl sm" fill="#7fa8d6">IVC</text>
-            <!-- shunt: aorta (systemic) to the PA = the neonatal lung supply -->
-            <path class="pulseC" d="M300,150 C280,132 250,128 224,126" fill="none" stroke="#63d29b" stroke-width="6" stroke-linecap="round" stroke-dasharray="6 4"></path>
-            <text x="250" y="150" text-anchor="middle" class="lbl sm" fill="#9be2b8">BT / Sano shunt to lungs</text>
+            <!-- atrial septectomy: green mixing at the RA/LA border -->
+            <path class="pulseC" d="M220,204 L220,226" fill="none" stroke="#63d29b" stroke-width="3"></path>
+            <path d="M220,204 l-4,6 M220,204 l4,6 M220,226 l-4,-6 M220,226 l4,-6" stroke="#63d29b" stroke-width="2.5" fill="none"></path>
+            <text x="216" y="189" text-anchor="middle" class="lbl sm" fill="#9be2b8">septum open</text>
+            <!-- native aorta = a thread that only fills the coronaries retrograde -->
+            <path d="M258,196 C242,170 236,152 232,134" fill="none" stroke="#c95d6c" stroke-width="2.5" stroke-dasharray="3 3"></path>
+            <text x="224" y="145" text-anchor="end" class="lbl sm" fill="#c98d97">native aorta</text>
+            <text x="224" y="158" text-anchor="end" class="lbl sm" fill="#c98d97">to coronaries</text>
+            <!-- BT shunt: small tube from the neo-aorta to the PA -->
+            <g id="nwBtG">
+              <path class="pulseC" d="M322,150 C274,132 232,126 196,126" fill="none" stroke="#4aa3f6" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 4"></path>
+              <text x="300" y="140" text-anchor="middle" class="lbl sm" fill="#8ac6f6">BT shunt</text>
+            </g>
+            <!-- Sano: small conduit from the RV to the PA -->
+            <g id="nwSanoG" style="display:none">
+              <path class="pulseC" d="M196,234 C186,190 186,150 192,130" fill="none" stroke="#4aa3f6" stroke-width="5" stroke-linecap="round"></path>
+              <text x="150" y="186" text-anchor="middle" class="lbl sm" fill="#8ac6f6">Sano (RV to PA)</text>
+            </g>
           </g>
 
-          <!-- ================= GLENN ================= -->
-          <g id="glGrp" style="display:none">
-            <!-- SVC re-routed straight to the PA (bidirectional cavopulmonary) -->
+          <!-- ============ PA BAND (too much flow) ============ -->
+          <g id="bandG" style="display:none">
+            <path d="M112,150 L112,206 C112,200 130,200 162,205" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
+            <text x="96" y="168" text-anchor="middle" class="lbl sm" fill="#7fa8d6">SVC</text>
+            <path d="M112,398 L112,250 C112,244 132,240 162,236" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
+            <text x="96" y="360" text-anchor="middle" class="lbl sm" fill="#7fa8d6">IVC</text>
+            <!-- pulmonary trunk from the ventricle up to the PA (big, unobstructed) -->
+            <path d="M200,234 L200,130" fill="none" stroke="#4aa3f6" stroke-width="9" stroke-linecap="round"></path>
+            <!-- the band pinching it -->
+            <rect x="188" y="170" width="24" height="12" rx="3" fill="none" stroke="#e0a53e" stroke-width="3"></rect>
+            <text x="236" y="166" text-anchor="middle" class="lbl sm" fill="#e0c07a">PA band</text>
+          </g>
+
+          <!-- ============ BT SHUNT (too little flow) ============ -->
+          <g id="btG" style="display:none">
+            <path d="M112,150 L112,206 C112,200 130,200 162,205" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
+            <text x="96" y="168" text-anchor="middle" class="lbl sm" fill="#7fa8d6">SVC</text>
+            <path d="M112,398 L112,250 C112,244 132,240 162,236" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
+            <text x="96" y="360" text-anchor="middle" class="lbl sm" fill="#7fa8d6">IVC</text>
+            <!-- native pulmonary trunk, small + stenosed (little flow) -->
+            <path d="M200,234 L200,130" fill="none" stroke="#4a6f9a" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M192,178 L208,178 M194,186 L206,186" stroke="#e0a53e" stroke-width="2.5"></path>
+            <text x="234" y="192" text-anchor="middle" class="lbl sm" fill="#e0c07a">PA + PS</text>
+            <!-- BT shunt adds flow from the aorta to the PA -->
+            <path class="pulseC" d="M320,156 C278,142 240,136 208,140" fill="none" stroke="#63d29b" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 4"></path>
+            <text x="272" y="152" text-anchor="middle" class="lbl sm" fill="#9be2b8">BT shunt adds flow</text>
+          </g>
+
+          <!-- ============ GLENN ============ -->
+          <g id="glennG" style="display:none">
             <path class="pulseC" d="M112,150 L112,122 C112,124 130,126 166,126" fill="none" stroke="#4aa3f6" stroke-width="6" stroke-linecap="round"></path>
             <text x="92" y="150" text-anchor="middle" class="lbl sm" fill="#8ac6f6">SVC</text>
             <text x="150" y="145" text-anchor="start" class="lbl sm" fill="#8ac6f6">SVC to PA</text>
-            <!-- IVC still into the RA -->
             <path d="M112,398 L112,250 C112,244 132,240 162,236" fill="none" stroke="#4a6f9a" stroke-width="6" stroke-linecap="round"></path>
             <text x="96" y="360" text-anchor="middle" class="lbl sm" fill="#7fa8d6">IVC (still to heart)</text>
           </g>
 
-          <!-- ================= FONTAN ================= -->
-          <g id="fnGrp" style="display:none">
-            <!-- SVC to PA -->
+          <!-- ============ FONTAN ============ -->
+          <g id="fontanG" style="display:none">
             <path class="pulseC" d="M112,150 L112,122 C112,124 130,126 166,126" fill="none" stroke="#4aa3f6" stroke-width="6" stroke-linecap="round"></path>
             <text x="92" y="150" text-anchor="middle" class="lbl sm" fill="#8ac6f6">SVC</text>
-            <!-- IVC routed up as an extracardiac conduit to the PA -->
             <path class="pulseC" d="M112,398 L112,132 C112,126 132,126 166,126" fill="none" stroke="#38a169" stroke-width="6" stroke-linecap="round"></path>
             <text x="92" y="360" text-anchor="middle" class="lbl sm" fill="#8fd6ab">IVC</text>
             <text x="150" y="360" text-anchor="start" class="lbl sm" fill="#8fd6ab">conduit to PA</text>
+            <!-- fenestration: small hole between the conduit and the atrium -->
+            <path d="M120,214 L160,214" fill="none" stroke="#e0a53e" stroke-width="3" stroke-dasharray="3 3"></path>
+            <circle cx="140" cy="214" r="4" fill="none" stroke="#e0a53e" stroke-width="2"></circle>
+            <text x="140" y="234" text-anchor="middle" class="lbl sm" fill="#e0c07a">fenestration</text>
           </g>
         </svg>
-        <p class="foot">Hand-drawn inline SVG, self-contained. Both cavopulmonary connections sit on the patient's right (screen-left), where the Glenn and Fontan are actually built.</p>
+        <p class="foot">Hand-drawn inline SVG, self-contained. The cavopulmonary connections sit on the patient's right (screen-left), where the Glenn and Fontan are actually built.</p>
       </div>
       <div class="info" id="svInfo">
-        <p class="name" id="svName">Stage 1: Norwood</p>
+        <p class="name" id="svName"></p>
         <div id="svBody"></div>
       </div>
     </div>
-    <div class="rule big" style="margin-top:14px">The one idea: after a Glenn/Fontan there is <b>NO pump between the systemic veins and the lungs</b>. Blood crosses the lungs only if the pulmonary resistance is LOW. That single fact drives BOTH exam questions.</div>
+    <div class="rule big" id="convergeRule" style="margin-top:14px">All three Stage-1 routes CONVERGE: everyone funnels into the <b>Glenn (Stage 2)</b> then the <b>Fontan (Stage 3)</b>. And the one idea underneath it all: after a Glenn/Fontan there is <b>NO pump between the systemic veins and the lungs</b>, so blood crosses only if the pulmonary resistance is LOW (that drives Q2 and Q10).</div>
   </div>
 
   <!-- 2. GLENN PREREQUISITES (Q2) -->
@@ -179,7 +231,8 @@
         </ul>
       </div>
     </div>
-    <div class="warnrule big">Q10: postoperative complications of a Glenn shunt, all EXCEPT <b>protein-losing enteropathy</b> (answer <b>E</b>). PLE needs the chronically high WHOLE-body systemic venous pressure of the completed <b>Fontan</b>; a Glenn only raises the SVC (upper body). Same logic for "Fontan liver disease" or "plastic bronchitis" if they appear - those are Fontan, not Glenn.</div>
+    <div class="rule"><b>The WHY (so you can reconstruct them):</b> <b>Glenn to AVMs</b> = the lungs get only SVC blood, so the liver's "hepatic factor" (in IVC blood) never reaches them and artery-to-vein shortcuts form (the Fontan cures it). <b>Every Fontan complication</b> = the whole venous system at HIGH pressure (lymph leaks: <b>PLE</b> into the gut, <b>plastic bronchitis</b> into the airway; liver congestion) + SLOW stagnant flow (<b>clots</b>) + NO pump for the lungs (<b>exercise intolerance</b>, and eventual <b>Fontan failure</b>); atrial suture lines in the old tunnel Fontans give the <b>arrhythmias</b>.</div>
+    <div class="warnrule big">Q10: postoperative complications of a Glenn shunt, all EXCEPT <b>protein-losing enteropathy</b> (answer <b>E</b>). PLE needs the chronically high WHOLE-body systemic venous pressure of the completed <b>Fontan</b>; a Glenn only raises the SVC (upper body).</div>
   </div>
 
   <p class="foot">C6 visual - Module 5 CHD. Hand-drawn inline SVG, self-contained.</p>
@@ -187,32 +240,58 @@
 
 <script>
 (function(){
-  var modes={
-    nw:{
-      name:'Stage 1: Norwood (neonate)',
-      body:'<p class="kv">In the first days of life the <b>single ventricle must supply BOTH</b> the body and the lungs. The Norwood <b>rebuilds a new aorta</b> from the pulmonary trunk (so the single ventricle can reach the body), does an <b>atrial septectomy</b> for free mixing, and adds a controlled <b>source of lung flow</b>: a <b>Blalock-Taussig shunt</b> (systemic artery to PA) or a <b>Sano</b> (RV to PA) conduit.</p><p class="kv" style="color:#9fb4d8;margin-top:8px">Goal: keep the baby alive and balanced until the pulmonary resistance falls.</p>'
-    },
-    gl:{
-      name:'Stage 2: bidirectional Glenn (~4 to 6 months)',
-      body:'<p class="kv">The <b>SVC is divided and sewn onto the pulmonary artery</b>, so all <b>upper-body venous blood flows passively into both lungs</b> ("bidirectional"). The old shunt is taken down. Done at 4 to 6 months, once the newborn PVR has fallen.</p><p class="kv" style="margin-top:8px">It <b>offloads the single ventricle</b> (no more recirculated pulmonary volume). The <b>IVC still returns to the heart</b>, so the child stays <b>mildly cyanotic</b>.</p>'
-    },
-    fn:{
-      name:'Stage 3: Fontan (~2 to 4 years)',
-      body:'<p class="kv">The <b>IVC is now also routed to the PA</b> (a lateral tunnel or an extracardiac conduit). Now <b>every systemic vein, upper and lower, drains to the lungs</b> = a total cavopulmonary connection.</p><p class="kv" style="margin-top:8px">The single ventricle finally pumps <b>only to the body</b>, and the child becomes <b>acyanotic</b>. A small <b>fenestration</b> is often left to pop off pressure early on.</p>'
-    }
+  var state={stage:1, lesion:'nw', shunt:'bt'};
+  var groups=['norwoodG','bandG','btG','glennG','fontanG'];
+  function showGroup(id){ groups.forEach(function(g){ document.getElementById(g).style.display=(g===id)?'':'none'; }); }
+  var info={
+    nwBt:{ name:'Stage 1 - Norwood (HLHS), BT shunt',
+      body:'<p class="kv">In HLHS the <b>ascending aorta is a thread</b> and the working RV has no outlet into it. The Norwood rebuilds the big <b>main PA into a NEO-AORTA</b> off the RV (RV to body), while the native aorta now only fills the <b>coronaries retrograde</b>. An <b>atrial septectomy</b> opens mixing.</p><p class="kv" style="margin-top:8px">Lung supply = a <b>modified BT shunt</b> (a small tube, systemic artery to PA). <b>Small on purpose</b>: an unrestricted flow would flood the lungs and starve the body.</p>' },
+    nwSano:{ name:'Stage 1 - Norwood (HLHS), Sano shunt',
+      body:'<p class="kv">Same Norwood (neo-aorta from the main PA, native aorta feeds only the coronaries, atrial septectomy), but the controlled lung supply here is a <b>Sano shunt: a small conduit from the RV directly to the PA</b> (instead of a systemic-artery BT shunt). Still deliberately small to keep the lungs and body balanced.</p>' },
+    band:{ name:'Stage 1 - Pulmonary artery band (too MUCH lung flow)',
+      body:'<p class="kv">A single ventricle with <b>NO pulmonary stenosis</b> and a normal aorta: the low-resistance lungs would be <b>flooded</b> (overcirculation, heart failure, and rising pulmonary pressure). Fix = a <b>band around the pulmonary artery</b> that mechanically <b>restricts</b> the excess flow. The aorta is normal, so <b>no Norwood</b>.</p>' },
+    bt:{ name:'Stage 1 - BT shunt (too LITTLE lung flow)',
+      body:'<p class="kv">A single ventricle <b>WITH pulmonary stenosis / atresia</b> (cyanotic, e.g. tricuspid atresia + PS) and a normal aorta: too little lung flow. Fix = <b>ADD</b> a controlled <b>BT shunt</b> (systemic artery to PA) to feed the lungs. The aorta is normal, so <b>no Norwood</b>.</p>' },
+    glenn:{ name:'Stage 2 - bidirectional Glenn (~4 to 6 months)',
+      body:'<p class="kv">The <b>SVC is divided and sewn to the pulmonary artery</b>, so all <b>upper-body venous blood flows passively into both lungs</b>. The Stage-1 shunt is taken down. Done once the newborn PVR has fallen.</p><p class="kv" style="margin-top:8px">It <b>offloads the single ventricle</b>. The <b>IVC still returns to the heart</b>, so the child stays <b>mildly cyanotic</b>.</p>' },
+    fontan:{ name:'Stage 3 - Fontan (~2 to 4 years)',
+      body:'<p class="kv">The <b>IVC is also routed to the PA</b> (an extracardiac conduit) = a total cavopulmonary connection. Now <b>every systemic vein drains to the lungs</b>, the ventricle pumps <b>only to the body</b>, and the child is <b>acyanotic</b>.</p><p class="kv" style="margin-top:8px">A small <b>fenestration</b> (a hole between the high-pressure conduit and the atrium) pops off early pressure and preserves output, at the cost of mild desaturation.</p>' }
   };
-  var order=['nw','gl','fn'];
-  var btn={nw:document.getElementById('nwBtn'),gl:document.getElementById('glBtn'),fn:document.getElementById('fnBtn')};
-  var grp={nw:document.getElementById('nwGrp'),gl:document.getElementById('glGrp'),fn:document.getElementById('fnGrp')};
-  function show(k){
-    order.forEach(function(o){
-      btn[o].classList.toggle('on',o===k);
-      grp[o].style.display=(o===k)?'':'none';
-    });
-    document.getElementById('svName').textContent=modes[k].name;
-    document.getElementById('svBody').innerHTML=modes[k].body;
+  function render(){
+    document.getElementById('stg1').classList.toggle('on',state.stage===1);
+    document.getElementById('stg2').classList.toggle('on',state.stage===2);
+    document.getElementById('stg3').classList.toggle('on',state.stage===3);
+    document.getElementById('s1sub').style.display=(state.stage===1)?'flex':'none';
+    document.getElementById('nwsub').style.display=(state.stage===1 && state.lesion==='nw')?'flex':'none';
+    var aoLbl=document.getElementById('aoLbl');
+    var key;
+    if(state.stage===2){ showGroup('glennG'); aoLbl.textContent='neo-aorta'; key='glenn'; }
+    else if(state.stage===3){ showGroup('fontanG'); aoLbl.textContent='neo-aorta'; key='fontan'; }
+    else {
+      document.getElementById('lesNw').classList.toggle('on',state.lesion==='nw');
+      document.getElementById('lesBand').classList.toggle('on',state.lesion==='band');
+      document.getElementById('lesBt').classList.toggle('on',state.lesion==='bt');
+      if(state.lesion==='nw'){
+        showGroup('norwoodG'); aoLbl.textContent='neo-aorta';
+        document.getElementById('nwBtG').style.display=(state.shunt==='bt')?'':'none';
+        document.getElementById('nwSanoG').style.display=(state.shunt==='sano')?'':'none';
+        document.getElementById('nwBtBtn').classList.toggle('on',state.shunt==='bt');
+        document.getElementById('nwSanoBtn').classList.toggle('on',state.shunt==='sano');
+        key=(state.shunt==='bt')?'nwBt':'nwSano';
+      } else if(state.lesion==='band'){ showGroup('bandG'); aoLbl.textContent='aorta'; key='band'; }
+      else { showGroup('btG'); aoLbl.textContent='aorta'; key='bt'; }
+    }
+    document.getElementById('svName').textContent=info[key].name;
+    document.getElementById('svBody').innerHTML=info[key].body;
   }
-  order.forEach(function(o){ btn[o].addEventListener('click',function(){ show(o); }); });
-  show('nw');
+  document.getElementById('stg1').addEventListener('click',function(){state.stage=1;render();});
+  document.getElementById('stg2').addEventListener('click',function(){state.stage=2;render();});
+  document.getElementById('stg3').addEventListener('click',function(){state.stage=3;render();});
+  document.getElementById('lesNw').addEventListener('click',function(){state.lesion='nw';render();});
+  document.getElementById('lesBand').addEventListener('click',function(){state.lesion='band';render();});
+  document.getElementById('lesBt').addEventListener('click',function(){state.lesion='bt';render();});
+  document.getElementById('nwBtBtn').addEventListener('click',function(){state.shunt='bt';render();});
+  document.getElementById('nwSanoBtn').addEventListener('click',function(){state.shunt='sano';render();});
+  render();
 })();
 </script>
